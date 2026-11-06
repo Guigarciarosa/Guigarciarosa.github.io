@@ -1,0 +1,24 @@
+{
+  "nome": "Guilherme Dias",
+  "titulo": "Engenheiro e analista de dados",
+  "resumo": "Construo pipelines de dados de ponta a ponta: extraio de APIs e arquivos públicos, modelo em camadas (bronze, silver, gold) no Databricks e no Snowflake, testo a qualidade e entrego dashboards que qualquer pessoa entende.",
+  "local": "Brasil",
+  "links": {
+    "github": "https://github.com/Guigarciarosa",
+    "linkedin": ""
+  },
+  "areas": [
+    {"titulo": "Engenharia de dados", "texto": "Pipelines em Python e SQL, arquitetura medalhão, Delta Lake, cargas incrementais e testes de qualidade."},
+    {"titulo": "Analytics e BI", "texto": "Modelagem para consumo, métricas bem definidas e dashboards interativos, do BI tradicional ao web."},
+    {"titulo": "Cloud e plataformas", "texto": "Databricks, Snowflake, AWS e Google Cloud; containers com Docker e automação."}
+  ],
+  "stack": [
+    {"grupo": "Linguagens", "itens": ["python", "sql", "pyspark"]},
+    {"grupo": "Plataformas de dados", "itens": ["databricks", "snowflake", "apachespark", "dbt", "duckdb", "postgresql"]},
+    {"grupo": "Cloud", "itens": ["amazonwebservices", "googlecloud", "googlebigquery"]},
+    {"grupo": "Orquestração e engenharia", "itens": ["apacheairflow", "docker", "git", "linux"]},
+    {"grupo": "Análise e visualização", "itens": ["pandas", "jupyter", "powerbi", "plotly", "streamlit"]}
+  ],
+  "experiencia": [],
+  "formacao": []
+}

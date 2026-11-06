@@ -1,0 +1,5 @@
+.env
+data/bronze/
+data/*.duckdb*
+__pycache__/
+.pytest_cache/

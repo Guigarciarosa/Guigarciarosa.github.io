@@ -1,0 +1,271 @@
+regiao;uf;ano;preco_litro
+Norte;Rondônia;2016;3.883
+Norte;Rondônia;2017;3.948583333
+Norte;Rondônia;2018;4.493916667
+Norte;Rondônia;2019;4.5145
+Norte;Rondônia;2020;4.381
+Norte;Rondônia;2021;5.8595
+Norte;Rondônia;2022;6.2
+Norte;Rondônia;2023;6.054166667
+Norte;Rondônia;2024;6.655833333
+Norte;Rondônia;2025;6.898333333
+Norte;Acre;2016;4.092
+Norte;Acre;2017;4.367583333
+Norte;Acre;2018;4.979916667
+Norte;Acre;2019;4.8515
+Norte;Acre;2020;4.821545455
+Norte;Acre;2021;6.322166667
+Norte;Acre;2022;6.51
+Norte;Acre;2023;6.262333333
+Norte;Acre;2024;7.0925
+Norte;Acre;2025;7.576666667
+Norte;Amazonas;2016;3.729
+Norte;Amazonas;2017;3.805166667
+Norte;Amazonas;2018;4.49625
+Norte;Amazonas;2019;4.223333333
+Norte;Amazonas;2020;4.273727273
+Norte;Amazonas;2021;5.638833333
+Norte;Amazonas;2022;6.2
+Norte;Amazonas;2023;6.229916667
+Norte;Amazonas;2024;6.538333333
+Norte;Amazonas;2025;7.0975
+Norte;Roraima;2016;3.882
+Norte;Roraima;2017;3.759916667
+Norte;Roraima;2018;4.257
+Norte;Roraima;2019;4.113083333
+Norte;Roraima;2020;3.992909091
+Norte;Roraima;2021;5.5035
+Norte;Roraima;2022;6.18
+Norte;Roraima;2023;5.868416667
+Norte;Roraima;2024;6.363333333
+Norte;Roraima;2025;6.944166667
+Norte;Pará;2016;3.984
+Norte;Pará;2017;4.02025
+Norte;Pará;2018;4.490666667
+Norte;Pará;2019;4.544666667
+Norte;Pará;2020;4.384181818
+Norte;Pará;2021;5.842833333
+Norte;Pará;2022;6.18
+Norte;Pará;2023;5.536166667
+Norte;Pará;2024;5.973333333
+Norte;Pará;2025;6.270833333
+Norte;Amapá;2016;3.653
+Norte;Amapá;2017;3.699416667
+Norte;Amapá;2018;4.071583333
+Norte;Amapá;2019;3.94875
+Norte;Amapá;2020;3.534818182
+Norte;Amapá;2021;5.02675
+Norte;Amapá;2022;5.48
+Norte;Amapá;2023;5.232166667
+Norte;Amapá;2024;5.7325
+Norte;Amapá;2025;6.035833333
+Norte;Tocantins;2016;3.864
+Norte;Tocantins;2017;3.884083333
+Norte;Tocantins;2018;4.653166667
+Norte;Tocantins;2019;4.570583333
+Norte;Tocantins;2020;4.545636364
+Norte;Tocantins;2021;6.015916667
+Norte;Tocantins;2022;6.37
+Norte;Tocantins;2023;5.760666667
+Norte;Tocantins;2024;6.189166667
+Norte;Tocantins;2025;6.5225
+Nordeste;Maranhão;2016;3.575
+Nordeste;Maranhão;2017;3.588083333
+Nordeste;Maranhão;2018;4.155416667
+Nordeste;Maranhão;2019;4.355583333
+Nordeste;Maranhão;2020;4.194363636
+Nordeste;Maranhão;2021;5.6265
+Nordeste;Maranhão;2022;6.06
+Nordeste;Maranhão;2023;5.296583333
+Nordeste;Maranhão;2024;5.711666667
+Nordeste;Maranhão;2025;5.9725
+Nordeste;Piauí;2016;3.657
+Nordeste;Piauí;2017;3.649166667
+Nordeste;Piauí;2018;4.423666667
+Nordeste;Piauí;2019;4.53675
+Nordeste;Piauí;2020;4.392818182
+Nordeste;Piauí;2021;6.096333333
+Nordeste;Piauí;2022;6.51
+Nordeste;Piauí;2023;5.45875
+Nordeste;Piauí;2024;5.743333333
+Nordeste;Piauí;2025;5.883333333
+Nordeste;Ceará;2016;3.909
+Nordeste;Ceará;2017;3.930166667
+Nordeste;Ceará;2018;4.499833333
+Nordeste;Ceará;2019;4.523333333
+Nordeste;Ceará;2020;4.403545455
+Nordeste;Ceará;2021;5.859166667
+Nordeste;Ceará;2022;6.23
+Nordeste;Ceará;2023;5.770166667
+Nordeste;Ceará;2024;6.0125
+Nordeste;Ceará;2025;6.318333333
+Nordeste;Rio Grande do Norte;2016;3.832
+Nordeste;Rio Grande do Norte;2017;3.863583333
+Nordeste;Rio Grande do Norte;2018;4.419083333
+Nordeste;Rio Grande do Norte;2019;4.485666667
+Nordeste;Rio Grande do Norte;2020;4.476636364
+Nordeste;Rio Grande do Norte;2021;6.087833333
+Nordeste;Rio Grande do Norte;2022;6.46
+Nordeste;Rio Grande do Norte;2023;5.736166667
+Nordeste;Rio Grande do Norte;2024;6.215833333
+Nordeste;Rio Grande do Norte;2025;6.271666667
+Nordeste;Paraíba;2016;3.658
+Nordeste;Paraíba;2017;3.652333333
+Nordeste;Paraíba;2018;4.229083333
+Nordeste;Paraíba;2019;4.274666667
+Nordeste;Paraíba;2020;4.065363636
+Nordeste;Paraíba;2021;5.596
+Nordeste;Paraíba;2022;5.99
+Nordeste;Paraíba;2023;5.37825
+Nordeste;Paraíba;2024;5.834166667
+Nordeste;Paraíba;2025;6.0375
+Nordeste;Pernambuco;2016;3.695
+Nordeste;Pernambuco;2017;3.672583333
+Nordeste;Pernambuco;2018;4.3
+Nordeste;Pernambuco;2019;4.323333333
+Nordeste;Pernambuco;2020;4.269363636
+Nordeste;Pernambuco;2021;5.747916667
+Nordeste;Pernambuco;2022;6.11
+Nordeste;Pernambuco;2023;5.43825
+Nordeste;Pernambuco;2024;5.910833333
+Nordeste;Pernambuco;2025;6.350833333
+Nordeste;Alagoas;2016;3.778
+Nordeste;Alagoas;2017;3.883916667
+Nordeste;Alagoas;2018;4.542916667
+Nordeste;Alagoas;2019;4.5245
+Nordeste;Alagoas;2020;4.412
+Nordeste;Alagoas;2021;5.862916667
+Nordeste;Alagoas;2022;6.12
+Nordeste;Alagoas;2023;5.556166667
+Nordeste;Alagoas;2024;5.96
+Nordeste;Alagoas;2025;6.2375
+Nordeste;Sergipe;2016;3.676
+Nordeste;Sergipe;2017;3.707416667
+Nordeste;Sergipe;2018;4.41525
+Nordeste;Sergipe;2019;4.38725
+Nordeste;Sergipe;2020;4.417
+Nordeste;Sergipe;2021;5.81825
+Nordeste;Sergipe;2022;6.07
+Nordeste;Sergipe;2023;5.606916667
+Nordeste;Sergipe;2024;6.168333333
+Nordeste;Sergipe;2025;6.566666667
+Nordeste;Bahia;2016;3.776
+Nordeste;Bahia;2017;3.816
+Nordeste;Bahia;2018;4.511083333
+Nordeste;Bahia;2019;4.550166667
+Nordeste;Bahia;2020;4.356181818
+Nordeste;Bahia;2021;5.88175
+Nordeste;Bahia;2022;6.47
+Nordeste;Bahia;2023;5.7775
+Nordeste;Bahia;2024;6.1275
+Nordeste;Bahia;2025;6.325
+Sudeste;Minas Gerais;2016;3.713
+Sudeste;Minas Gerais;2017;3.848666667
+Sudeste;Minas Gerais;2018;4.67025
+Sudeste;Minas Gerais;2019;4.660583333
+Sudeste;Minas Gerais;2020;4.446636364
+Sudeste;Minas Gerais;2021;6.004666667
+Sudeste;Minas Gerais;2022;6.21
+Sudeste;Minas Gerais;2023;5.332666667
+Sudeste;Minas Gerais;2024;5.895833333
+Sudeste;Minas Gerais;2025;6.11
+Sudeste;Espírito Santo;2016;3.676
+Sudeste;Espírito Santo;2017;3.774416667
+Sudeste;Espírito Santo;2018;4.37525
+Sudeste;Espírito Santo;2019;4.458666667
+Sudeste;Espírito Santo;2020;4.204090909
+Sudeste;Espírito Santo;2021;5.854916667
+Sudeste;Espírito Santo;2022;6.2
+Sudeste;Espírito Santo;2023;5.610666667
+Sudeste;Espírito Santo;2024;6.005
+Sudeste;Espírito Santo;2025;6.215
+Sudeste;Rio de Janeiro;2016;3.919
+Sudeste;Rio de Janeiro;2017;4.107416667
+Sudeste;Rio de Janeiro;2018;4.851833333
+Sudeste;Rio de Janeiro;2019;4.855583333
+Sudeste;Rio de Janeiro;2020;4.761454545
+Sudeste;Rio de Janeiro;2021;6.2965
+Sudeste;Rio de Janeiro;2022;6.42
+Sudeste;Rio de Janeiro;2023;5.499
+Sudeste;Rio de Janeiro;2024;5.860833333
+Sudeste;Rio de Janeiro;2025;6.114166667
+Sudeste;São Paulo;2016;3.5
+Sudeste;São Paulo;2017;3.57925
+Sudeste;São Paulo;2018;4.193
+Sudeste;São Paulo;2019;4.135833333
+Sudeste;São Paulo;2020;4.091
+Sudeste;São Paulo;2021;5.476916667
+Sudeste;São Paulo;2022;5.88
+Sudeste;São Paulo;2023;5.359166667
+Sudeste;São Paulo;2024;5.749166667
+Sudeste;São Paulo;2025;6.086666667
+Sul;Paraná;2016;3.632
+Sul;Paraná;2017;3.695
+Sul;Paraná;2018;4.2725
+Sul;Paraná;2019;4.172416667
+Sul;Paraná;2020;4.023
+Sul;Paraná;2021;5.531416667
+Sul;Paraná;2022;6.11
+Sul;Paraná;2023;5.64225
+Sul;Paraná;2024;6.078333333
+Sul;Paraná;2025;6.51
+Sul;Santa Catarina;2016;3.518
+Sul;Santa Catarina;2017;3.6565
+Sul;Santa Catarina;2018;4.102583333
+Sul;Santa Catarina;2019;4.076416667
+Sul;Santa Catarina;2020;4.154636364
+Sul;Santa Catarina;2021;5.55925
+Sul;Santa Catarina;2022;6.06
+Sul;Santa Catarina;2023;5.607
+Sul;Santa Catarina;2024;6.030833333
+Sul;Santa Catarina;2025;6.409166667
+Sul;Rio Grande do Sul;2016;3.874
+Sul;Rio Grande do Sul;2017;3.912666667
+Sul;Rio Grande do Sul;2018;4.5865
+Sul;Rio Grande do Sul;2019;4.513833333
+Sul;Rio Grande do Sul;2020;4.348363636
+Sul;Rio Grande do Sul;2021;6.006
+Sul;Rio Grande do Sul;2022;5.9
+Sul;Rio Grande do Sul;2023;5.433083333
+Sul;Rio Grande do Sul;2024;5.901666667
+Sul;Rio Grande do Sul;2025;6.1725
+Centro-Oeste;Mato Grosso do Sul;2016;3.514
+Centro-Oeste;Mato Grosso do Sul;2017;3.69775
+Centro-Oeste;Mato Grosso do Sul;2018;4.2425
+Centro-Oeste;Mato Grosso do Sul;2019;4.1405
+Centro-Oeste;Mato Grosso do Sul;2020;4.321181818
+Centro-Oeste;Mato Grosso do Sul;2021;5.776416667
+Centro-Oeste;Mato Grosso do Sul;2022;5.89
+Centro-Oeste;Mato Grosso do Sul;2023;5.257333333
+Centro-Oeste;Mato Grosso do Sul;2024;5.745833333
+Centro-Oeste;Mato Grosso do Sul;2025;6.008333333
+Centro-Oeste;Mato Grosso;2016;3.72
+Centro-Oeste;Mato Grosso;2017;3.80675
+Centro-Oeste;Mato Grosso;2018;4.503666667
+Centro-Oeste;Mato Grosso;2019;4.496
+Centro-Oeste;Mato Grosso;2020;4.341636364
+Centro-Oeste;Mato Grosso;2021;5.78075
+Centro-Oeste;Mato Grosso;2022;6.03
+Centro-Oeste;Mato Grosso;2023;5.5075
+Centro-Oeste;Mato Grosso;2024;5.946666667
+Centro-Oeste;Mato Grosso;2025;6.2525
+Centro-Oeste;Goiás;2016;3.81
+Centro-Oeste;Goiás;2017;3.923416667
+Centro-Oeste;Goiás;2018;4.6065
+Centro-Oeste;Goiás;2019;4.522333333
+Centro-Oeste;Goiás;2020;4.434454545
+Centro-Oeste;Goiás;2021;6.072416667
+Centro-Oeste;Goiás;2022;6.17
+Centro-Oeste;Goiás;2023;5.43875
+Centro-Oeste;Goiás;2024;5.95
+Centro-Oeste;Goiás;2025;6.305
+Centro-Oeste;Distrito Federal;2016;3.691
+Centro-Oeste;Distrito Federal;2017;3.74775
+Centro-Oeste;Distrito Federal;2018;4.453666667
+Centro-Oeste;Distrito Federal;2019;4.288583333
+Centro-Oeste;Distrito Federal;2020;4.200181818
+Centro-Oeste;Distrito Federal;2021;5.985833333
+Centro-Oeste;Distrito Federal;2022;6.22
+Centro-Oeste;Distrito Federal;2023;5.450333333
+Centro-Oeste;Distrito Federal;2024;5.893333333
+Centro-Oeste;Distrito Federal;2025;6.439166667

@@ -1,0 +1,159 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Poder de compra do mínimo</title>
+<meta name="description" content="Quantos Big Macs, litros de gasolina e m² de aluguel em SP um salário mínimo comprou de 1995 até hoje.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/style.css">
+<script src="../../assets/app.js"></script>
+<script src="../../assets/vendor/echarts.min.js"></script>
+</head>
+<body>
+<header class="nav"><div class="wrap">
+  <a class="brand" href="../../"><span class="mono">GD</span>Guilherme Dias</a>
+  <nav class="nav-links">
+    <a href="#comparador">Comparador</a>
+    <a href="#graficos" class="hide-sm">Gráficos</a>
+    <a href="#contexto" class="hide-sm">Contexto</a>
+    <a href="#bastidores">Como foi feito</a>
+    <a href="../../docs.html?doc=projeto-1" class="hide-sm">Docs</a>
+  </nav>
+  <button class="theme-btn" onclick="alternarTema()" aria-label="Alternar tema">◐</button>
+</div></header>
+
+<main>
+<section class="hero" style="padding-bottom:28px"><div class="wrap">
+  <div class="eyebrow">Projeto 01 · Economia brasileira</div>
+  <h1>Qual o real valor de compra<br>do salário mínimo?</h1>
+  <p class="lead">Reais mudam de valor; um Big Mac, um litro de gasolina e um metro quadrado de aluguel, não. Medindo o mínimo nessas três "moedas", dá para comparar 1995 com hoje sem depender só de índices de inflação.</p>
+  <div class="tags" style="margin-top:16px">
+    <span class="tag">Python</span><span class="tag">SQL</span><span class="tag">Databricks</span><span class="tag">Delta Lake</span><span class="tag">Unity Catalog</span><span class="tag">DuckDB</span><span class="tag">ECharts</span>
+  </div>
+  <p style="margin-top:16px"><span class="badge"><span class="led"></span><span id="motor">carregando…</span></span></p>
+</div></section>
+
+<div class="filterbar"><div class="wrap">
+  <span class="small muted">Ver</span>
+  <div class="seg" id="filtro" role="group" aria-label="Filtrar por métrica">
+    <button data-f="todos" aria-pressed="true">Tudo</button>
+    <button data-f="bigmacs"><span class="dot" style="background:var(--series-1)"></span>Big Mac</button>
+    <button data-f="litros_gasolina"><span class="dot" style="background:var(--series-2)"></span>Gasolina</button>
+    <button data-f="m2_aluguel_sp"><span class="dot" style="background:var(--series-3)"></span>Aluguel SP</button>
+  </div>
+</div></div>
+
+<section style="padding-top:36px"><div class="wrap story">
+  <div>
+    <div class="eyebrow" id="story-eyebrow">Big Macs por salário mínimo</div>
+    <div class="big-number" id="story-num">–</div>
+    <p class="lead" id="story-txt"></p>
+  </div>
+  <div class="card"><div id="ch-story" class="chart" role="img" aria-label="Evolução da métrica escolhida"></div></div>
+</div></section>
+
+<section id="perguntas"><div class="wrap">
+  <h2>As três perguntas, com dado real</h2>
+  <p class="muted">Cada número vem da fonte oficial e passa por um teste automático no pipeline.</p>
+  <div class="grid grid-3" id="fatos" style="margin-top:20px"></div>
+</div></section>
+
+<section id="comparador"><div class="wrap">
+  <h2>Compare dois anos</h2>
+  <div class="controls">
+    <label>De<select id="anoA"></select></label>
+    <label>Para<select id="anoB"></select></label>
+  </div>
+  <div class="grid grid-4" id="kpis"></div>
+  <p class="small muted" style="margin-top:12px" id="cobertura"></p>
+</div></section>
+
+<section id="graficos"><div class="wrap">
+  <h2>Ano a ano</h2>
+  <div class="grid grid-2" style="margin-top:18px">
+    <div class="card" data-m="salario">
+      <p class="chart-title">Salário mínimo: nominal e real</p>
+      <p class="chart-sub" id="sub-real">R$ por mês. Real = corrigido pelo IPCA.</p>
+      <div id="ch-salario" class="chart"></div>
+    </div>
+    <div class="card" data-m="bigmacs">
+      <p class="chart-title">Big Macs por salário</p>
+      <p class="chart-sub">Preço do Big Mac no Brasil, The Economist (desde 1995).</p>
+      <div id="ch-bigmac" class="chart"></div>
+    </div>
+    <div class="card" data-m="litros_gasolina">
+      <p class="chart-title">Litros de gasolina por salário</p>
+      <p class="chart-sub">Preço médio de revenda da gasolina comum, ANP (desde 2001).</p>
+      <div id="ch-gasolina" class="chart"></div>
+    </div>
+    <div class="card" data-m="m2_aluguel_sp">
+      <p class="chart-title">Metros quadrados de aluguel em São Paulo</p>
+      <p class="chart-sub">Quantos m² de aluguel um mínimo paga por mês. FipeZAP Locação (desde 2008).</p>
+      <div id="ch-aluguel" class="chart"></div>
+    </div>
+    <div class="card" data-m="indice" style="grid-column:1/-1">
+      <p class="chart-title">Tudo na mesma régua</p>
+      <p class="chart-sub">Índice: <select id="base" style="padding:2px 6px;font-size:13px"></select> = 100. Acima de 100, o mínimo compra mais do que no ano-base.</p>
+      <div id="ch-indice" class="chart"></div>
+    </div>
+  </div>
+</div></section>
+
+<section id="anp" data-m="litros_gasolina"><div class="wrap">
+  <div class="eyebrow" style="color:var(--series-2)">Tabela da ANP</div>
+  <h2>Gasolina mês a mês</h2>
+  <p class="muted">Preço médio de revenda da gasolina comum no Brasil, levantamento semanal da ANP consolidado por mês, e quantos litros o mínimo do mês comprava.</p>
+  <div class="card" style="margin-top:18px">
+    <div id="ch-anp" class="chart tall"></div>
+  </div>
+  <div class="controls" style="margin-top:18px"><label>Ano<select id="anoAnp"></select></label></div>
+  <div class="table-wrap" style="max-height:380px"><table id="tab-anp"></table></div>
+</div></section>
+
+<section id="contexto"><div class="wrap">
+  <h2>O que estava acontecendo</h2>
+  <p class="muted">Os pontos de virada das curvas, com a matéria ou a fonte da época.</p>
+  <div class="timeline" id="timeline"></div>
+</div></section>
+
+<section id="tabela-sec"><div class="wrap">
+  <h2>Tabela anual</h2>
+  <div class="table-wrap" style="max-height:440px;margin-top:14px"><table id="tabela"></table></div>
+</div></section>
+
+<section id="bastidores"><div class="wrap">
+  <div class="eyebrow">Como este projeto foi feito</div>
+  <h2>Da fonte oficial ao gráfico</h2>
+  <p class="lead">Arquitetura medalhão no Databricks: o dado bruto entra como veio (bronze), é limpo e tipado (silver) e vira uma tabela pronta para o gráfico (gold). O mesmo SQL roda no Databricks, no Snowflake e no DuckDB, que é o plano B quando a nuvem falha.</p>
+  <div class="flow" style="margin-top:24px">
+    <div class="card step"><div class="n">01 · extração</div><h3>APIs oficiais</h3><p class="small muted">Python baixa BCB (SGS 1619 e 433), ANP, FipeZAP, IPEA e The Economist, com retentativa, manifesto (origem, linhas, hash) e snapshot de reserva.</p></div>
+    <div class="card step"><div class="n">02 · bronze</div><h3><span class="medal" style="background:#b0793c"></span>Volume + Delta</h3><p class="small muted">Os arquivos sobem para um Volume do Unity Catalog pela Files API e viram tabelas Delta com <code>read_files</code>.</p></div>
+    <div class="card step"><div class="n">03 · silver</div><h3><span class="medal" style="background:#a3a6ad"></span>Limpo e tipado</h3><p class="small muted">Um grão por tabela (mês ou ano). Moedas pré-Real descartadas; IPCA composto mês a mês.</p></div>
+    <div class="card step"><div class="n">04 · gold + testes</div><h3><span class="medal" style="background:#d8b04a"></span>Pronto para o BI</h3><p class="small muted"><code>gold_poder_compra_anual</code>, <code>_mensal</code> e <code>gold_qualidade</code>. O pipeline para se um teste falhar, e o pytest confere contra valores checados à mão.</p></div>
+  </div>
+
+  <h3 style="margin-top:40px">Prints do Databricks</h3>
+  <div class="gallery" id="galeria"></div>
+
+  <div class="grid grid-2" style="margin-top:40px">
+    <div class="card">
+      <h3>Fontes desta versão</h3>
+      <div class="table-wrap"><table id="fontes"></table></div>
+    </div>
+    <div class="card">
+      <h3>Testes de qualidade</h3>
+      <div id="testes"></div>
+      <p class="small" style="margin-top:16px"><a href="../../docs.html?doc=projeto-1">Documentação completa →</a> · <a href="../../docs.html?doc=databricks">Guia do Databricks →</a> · <a href="../../data/contexto.json">API da linha do tempo (JSON) →</a></p>
+    </div>
+  </div>
+</div></section>
+</main>
+
+<div class="lightbox" id="lb" onclick="this.classList.remove('on')"><img alt=""></div>
+<footer><div class="wrap">© <span id="ano-atual"></span> Guilherme Dias · Fontes: Banco Central do Brasil (SGS), ANP, Fipe/ZAP, IPEA e The Economist (Big Mac Index). Valores nominais em R$, salvo o salário real.</div></footer>
+
+<script src="dashboard.js"></script>
+</body>
+</html>

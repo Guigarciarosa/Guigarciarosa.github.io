@@ -1,0 +1,12 @@
+# Pipeline do Projeto 1. Grava o JSON direto na pasta data/ do site (raiz do repositório).
+#   docker compose run --rm pipeline
+services:
+  pipeline:
+    build: .
+    env_file: .env
+    environment:
+      SITE_DATA: /app/site/data
+    volumes:
+      - ./data:/app/data
+      - ../../data:/app/site/data
+    security_opt: [no-new-privileges:true]

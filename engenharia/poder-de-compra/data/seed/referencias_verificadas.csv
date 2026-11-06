@@ -1,0 +1,8 @@
+indicador;periodo;valor;unidade;fonte;como_foi_verificado
+bigmac_preco;1995-04;2.45;R$;The Economist, big-mac-historical-source-data.csv;linha Brazil,BRL,2.45,0.9,1995-04-01
+salario_minimo;1995-04;70.00;R$;BCB SGS 1619;API do BCB, valor de abr/1995
+salario_minimo;1995-05;100.00;R$;BCB SGS 1619 (Lei 9.032/1995);API do BCB, valor de mai/1995
+salario_minimo;2009-02;465.00;R$;BCB SGS 1619;API do BCB, valor de fev/2009
+salario_minimo;2004-05;260.00;R$;BCB SGS 1619;API do BCB, valor de mai/2004
+gasolina_litro;2004;2.137;R$/l;ANP, levantamento de preços (média anual Brasil);checagem AFP/Estado de Minas, 09/03/2021
+aluguel_m2_sp;2026-08;65.36;R$/m2;Índice FipeZAP Locação, informe de agosto/2026;PDF oficial da Fipe

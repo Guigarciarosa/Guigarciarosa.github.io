@@ -1,0 +1,71 @@
+{
+  "descricao": "Linha do tempo do Projeto 1: fatos que explicam as curvas, com a matéria ou fonte da época. Edite este arquivo para acrescentar eventos; o dashboard lê direto dele.",
+  "eventos": [
+    {
+      "ano": 1995, "metrica": "bigmacs",
+      "titulo": "Mínimo vai a R$ 100 e o Big Mac custa R$ 2,45",
+      "texto": "Em maio de 1995, menos de um ano depois do Plano Real, o mínimo subiu de R$ 70 para R$ 100 (Lei 9.032/1995). Na pesquisa de abril da The Economist, o Big Mac custava R$ 2,45: com o novo mínimo, 40,8 sanduíches.",
+      "fontes": [
+        {"nome": "The Economist: dados históricos do Big Mac Index (GitHub)", "url": "https://github.com/TheEconomist/big-mac-data"}
+      ]
+    },
+    {
+      "ano": 2004, "metrica": "litros_gasolina",
+      "titulo": "Gasolina a R$ 2,137 o litro",
+      "texto": "Média anual da ANP para a gasolina comum. Uma checagem da AFP em 2021 usou a mesma série para mostrar quantos litros o mínimo comprava ano a ano e corrigiu uma tabela viral que dizia R$ 3,08.",
+      "fontes": [
+        {"nome": "AFP Checamos / Estado de Minas, 09/03/2021: quantos litros de gasolina o mínimo comprou desde 2001", "url": "https://www.em.com.br/app/noticia/internacional/factcheck/2021/03/09/interna_internacional,1244865/checamos-quantos-litros-de-gasolina-foi-possivel-comprar-com-o-salario-mini.shtml"}
+      ]
+    },
+    {
+      "ano": 2009, "metrica": "m2_aluguel_sp",
+      "titulo": "Mínimo de R$ 465 e o começo da série de aluguel",
+      "texto": "Em fevereiro de 2009 o mínimo passou de R$ 415 para R$ 465, alta real de 6,39%. É também o segundo ano da série de aluguel do FipeZAP em São Paulo, que começa em janeiro de 2008, quando o m² estava em R$ 18,63.",
+      "fontes": [
+        {"nome": "Congresso em Foco, 02/02/2009: novo salário mínimo de R$ 465 entra em vigor", "url": "https://www.congressoemfoco.com.br/noticia/78614/novo-salario-minimo-de-r-465-entra-em-vigor"},
+        {"nome": "DIEESE, nota técnica 79: salário mínimo de 2009", "url": "https://www.dieese.org.br/notatecnica/2009/notatec79SalMin2009.pdf"}
+      ]
+    },
+    {
+      "ano": 2011, "metrica": "bigmacs",
+      "titulo": "O real mais sobrevalorizado do mundo pelo Big Mac",
+      "texto": "Em julho de 2011, com o dólar a R$ 1,54, o Big Mac de R$ 9,50 custava o equivalente a US$ 6,16, um dos mais caros do índice em dólar. Em reais, o mínimo ainda comprava 57 sanduíches.",
+      "fontes": [
+        {"nome": "Forbes, 29/07/2011: Big Mac Index, Brazil's real is the most overvalued currency in the world", "url": "https://www.forbes.com/sites/ricardogeromel/2011/07/29/big-mac-index-brazils-real-is-the-most-overvalued-currency-in-the-world/"}
+      ]
+    },
+    {
+      "ano": 2015, "metrica": "salario_real_hoje",
+      "titulo": "Inflação de 10,67%, a maior desde 2002",
+      "texto": "O IPCA estourou o teto da meta e o Banco Central teve de escrever uma carta explicando. O mínimo real, que vinha subindo desde 1995, praticamente parou de crescer até 2022.",
+      "fontes": [
+        {"nome": "IstoÉ Dinheiro, 08/01/2016: IPCA acumula alta de 10,67% em 2015, maior taxa anual desde 2002", "url": "https://istoedinheiro.com.br/ipca-acumula-alta-de-1067-em-2015-maior-taxa-anual-desde-2002-revela-ibge"}
+      ]
+    },
+    {
+      "ano": 2021, "metrica": "litros_gasolina",
+      "titulo": "Gasolina no maior preço da série",
+      "texto": "O litro subiu cerca de 35% no ano, contra 5,3% do mínimo. Foi a pior queda em litros por salário da série. Em maio de 2022 a média nacional chegou a R$ 7,29.",
+      "fontes": [
+        {"nome": "Nexo, 30/08/2021: preço da gasolina é o mais alto desde maio de 2004", "url": "https://www.nexojornal.com.br/grafico/2021/08/30/preco-da-gasolina-no-brasil-e-o-mais-alto-desde-maio-de-2004"},
+        {"nome": "CNN Brasil, 06/05/2022: preço médio da gasolina chega a R$ 7,29 e bate recorde", "url": "https://www.cnnbrasil.com.br/economia/macroeconomia/anp-valor-medio-da-gasolina-chega-a-r-73-maior-da-serie-historica/"}
+      ]
+    },
+    {
+      "ano": 2022, "metrica": "m2_aluguel_sp",
+      "titulo": "Aluguel tem a maior alta em dez anos",
+      "texto": "Em fevereiro de 2022 o FipeZAP registrou a maior alta mensal do aluguel em cerca de uma década, e São Paulo tinha o m² mais caro, a R$ 40,25.",
+      "fontes": [
+        {"nome": "Suno, 16/03/2022: aluguel tem maior alta em dez anos, e SP tem o preço médio mais caro", "url": "https://www.suno.com.br/noticias/aluguel-maior-alta-fevereiro-sp-preco-medio/"}
+      ]
+    },
+    {
+      "ano": 2025, "metrica": "bigmacs",
+      "titulo": "Big Mac subiu quase o dobro da inflação em três décadas",
+      "texto": "Reportagem compara o preço do sanduíche com o IPCA desde os anos 1990. Mesmo assim, como o mínimo teve ganhos reais, ele hoje compra mais Big Macs do que em 1995.",
+      "fontes": [
+        {"nome": "IstoÉ Dinheiro, 13/03/2025: Big Mac subiu quase o dobro da inflação do Brasil em 3 décadas", "url": "https://istoedinheiro.com.br/big-mac-inflacao-brasil-ipca"}
+      ]
+    }
+  ]
+}

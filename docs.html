@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Documentação · Dados</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/style.css">
+<script src="assets/app.js"></script>
+<script src="assets/vendor/marked.min.js"></script>
+<script src="assets/vendor/purify.min.js"></script>
+</head>
+<body>
+<header class="nav"><div class="wrap">
+  <a class="brand" href="./"><span class="mono">GD</span>Guilherme Dias</a>
+  <nav class="nav-links"><a href="./#projetos">Projetos</a></nav>
+  <button class="theme-btn" onclick="alternarTema()" aria-label="Alternar tema">◐</button>
+</div></header>
+<div class="wrap doc-layout">
+  <nav id="menu"></nav>
+  <article class="doc" id="doc">Carregando…</article>
+</div>
+<script>
+const DOCS = [
+  ["projeto-1", "Projeto 1: poder de compra"],
+  ["databricks", "Guia do Databricks"],
+  ["snowflake", "Snowflake: como seria"],
+  ["fontes", "Fontes e metodologia"],
+  ["novo-projeto", "Como adicionar um projeto"],
+];
+const atual = new URLSearchParams(location.search).get("doc") || DOCS[0][0];
+document.getElementById("menu").innerHTML = DOCS.map(([id, t]) => `<a href="?doc=${id}" class="${id === atual ? "on" : ""}">${t}</a>`).join("");
+fetch(`docs/${atual}.md`).then(r => r.ok ? r.text() : "# Não encontrado").then(md => {
+  // imagens relativas aos prints
+  document.getElementById("doc").innerHTML = DOMPurify.sanitize(marked.parse(md));
+  document.title = (DOCS.find(d => d[0] === atual) || ["", "Documentação"])[1] + " · Dados";
+});
+</script>
+</body>
+</html>

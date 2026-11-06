@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Guilherme Dias · Dados</title>
+<meta name="description" content="Portfólio de Guilherme Dias: engenharia e análise de dados, Databricks, Snowflake, Python, SQL e dashboards interativos.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600&family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/style.css">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='8' fill='%23141413'/><text x='16' y='21' font-family='Arial' font-weight='800' font-size='13' fill='white' text-anchor='middle'>GD</text></svg>">
+<script src="assets/app.js"></script>
+<script src="assets/logos.js"></script>
+</head>
+<body>
+<header class="nav"><div class="wrap">
+  <a class="brand" href="./"><span class="mono">GD</span>Guilherme Dias</a>
+  <nav class="nav-links">
+    <a href="#sobre" class="hide-sm">Sobre</a>
+    <a href="#stack-sec">Stack</a>
+    <a href="#projetos">Projetos</a>
+  </nav>
+  <button class="theme-btn" onclick="alternarTema()" aria-label="Alternar tema">◐</button>
+</div></header>
+
+<main>
+<section class="hero" id="sobre"><div class="wrap hero-grid">
+  <div>
+    <div class="eyebrow" id="titulo">Dados</div>
+    <h1 id="nome">Guilherme Dias</h1>
+    <p class="lead" id="resumo"></p>
+    <div class="cta">
+      <a class="btn primary" href="#projetos">Ver projetos</a>
+      <a class="btn" id="lnk-linkedin" href="#" target="_blank" rel="noopener"><svg viewBox="0 0 24 24"><path d="M20.45 20.45h-3.56v-5.57c0-1.33-.02-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.35V9h3.41v1.56h.05c.48-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28zM5.34 7.43a2.06 2.06 0 1 1 0-4.13 2.06 2.06 0 0 1 0 4.13zM7.12 20.45H3.56V9h3.56v11.45zM22.22 0H1.77C.79 0 0 .77 0 1.73v20.54C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.73V1.73C24 .77 23.2 0 22.22 0z"/></svg>LinkedIn</a>
+      <a class="btn" id="lnk-github" href="#" target="_blank" rel="noopener"><svg viewBox="0 0 24 24"><path d="M12 .3a12 12 0 0 0-3.8 23.4c.6.1.8-.3.8-.6v-2c-3.3.7-4-1.6-4-1.6-.6-1.4-1.4-1.8-1.4-1.8-1-.7.1-.7.1-.7 1.2.1 1.8 1.2 1.8 1.2 1 1.8 2.8 1.3 3.5 1 0-.8.4-1.3.7-1.6-2.7-.3-5.5-1.3-5.5-6 0-1.2.5-2.3 1.3-3.1-.2-.4-.6-1.6 0-3.2 0 0 1-.3 3.4 1.2a11.5 11.5 0 0 1 6 0c2.3-1.5 3.3-1.2 3.3-1.2.6 1.6.2 2.8.1 3.2.8.8 1.3 1.9 1.3 3.2 0 4.6-2.8 5.6-5.5 5.9.5.4.9 1.1.9 2.2v3.3c0 .3.1.7.8.6A12 12 0 0 0 12 .3"/></svg>GitHub</a>
+    </div>
+  </div>
+  <div class="logos" id="hero-logos" style="grid-template-columns:repeat(3,1fr)"></div>
+</div></section>
+
+<section id="areas-sec"><div class="wrap">
+  <h2>O que eu faço</h2>
+  <div class="grid grid-3" id="areas" style="margin-top:20px"></div>
+</div></section>
+
+<section id="stack-sec"><div class="wrap">
+  <h2>Stack</h2>
+  <p class="muted">Ferramentas que uso no dia a dia e nos projetos deste portfólio.</p>
+  <div id="stack"></div>
+</div></section>
+
+<section id="sec-xp"><div class="wrap">
+  <h2>Experiência</h2>
+  <div id="xp" style="margin-top:12px"></div>
+</div></section>
+
+<section id="projetos"><div class="wrap">
+  <h2>Projetos</h2>
+  <p class="muted">Cada projeto mostra o resultado, o código e os bastidores da ferramenta usada.</p>
+  <div class="grid grid-2" style="margin-top:22px">
+    <a class="card project-card" href="projetos/poder-de-compra/">
+      <div class="thumb" id="thumb-1"></div>
+      <div class="eyebrow">Projeto 01 · Economia</div>
+      <h3>Qual o real valor de compra do brasileiro?</h3>
+      <p class="muted small" style="margin:0">Quantos Big Macs, litros de gasolina e metros quadrados de aluguel em São Paulo um salário mínimo comprou em cada ano, de 1995 até hoje. Pipeline medalhão no Databricks com dados do BCB, ANP, FipeZAP, IPEA e The Economist.</p>
+      <div class="tags"><span class="tag">Databricks</span><span class="tag">Delta Lake</span><span class="tag">Python</span><span class="tag">SQL</span><span class="tag">ECharts</span></div>
+    </a>
+    <div class="card project-card soon">
+      <div class="thumb placeholder">Em breve</div>
+      <div class="eyebrow">Projeto 02</div>
+      <h3>Próximo projeto</h3>
+      <p class="muted small" style="margin:0">Em construção.</p>
+    </div>
+  </div>
+</div></section>
+</main>
+
+<footer><div class="wrap">© <span id="ano-atual"></span> Guilherme Dias</div></footer>
+
+<script src="assets/home.js"></script>
+<script>
+fetch("data/poder_compra.json").then(r => r.json()).then(d => {
+  const pts = d.anual.filter(r => r.bigmacs), w = 600, h = 170, pad = 14;
+  const xs = pts.map(r => r.ano), ys = pts.map(r => r.bigmacs);
+  const x = a => pad + (a - xs[0]) / (xs.at(-1) - xs[0]) * (w - 2 * pad);
+  const y = v => h - pad - (v - Math.min(...ys) + 3) / (Math.max(...ys) - Math.min(...ys) + 6) * (h - 2 * pad);
+  const path = pts.map((r, i) => (i ? "L" : "M") + x(r.ano).toFixed(1) + "," + y(r.bigmacs).toFixed(1)).join("");
+  document.getElementById("thumb-1").innerHTML =
+    `<svg viewBox="0 0 ${w} ${h}" preserveAspectRatio="none" width="100%" height="100%">
+       <path d="${path} L${x(xs.at(-1))},${h} L${x(xs[0])},${h}Z" fill="var(--series-1)" opacity=".12"/>
+       <path d="${path}" fill="none" stroke="var(--series-1)" stroke-width="2.5" vector-effect="non-scaling-stroke"/>
+     </svg>`;
+});
+</script>
+</body>
+</html>
