@@ -9,6 +9,7 @@ services:
     environment:
       MERCADO_DATA: /data
       TZ: America/Sao_Paulo
+      HOME: /tmp            # o UID do host pode não existir na imagem (sem home gravável)
     ports:
       - "${BIND_IP:-127.0.0.1}:${PORTA_HOST:-8100}:8100"   # painel
       - "${BIND_IP:-127.0.0.1}:${PORTA_VNC:-8101}:6080"    # noVNC (ver as abas do checkout)
