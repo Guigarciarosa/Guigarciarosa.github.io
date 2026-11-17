@@ -17,7 +17,7 @@ ENV PYTHONDONTWRITEBYTECODE=1 PYTHONUNBUFFERED=1 PIP_NO_CACHE_DIR=1 \
 RUN --mount=type=secret,id=ca,required=false \
     sed -i 's|http://deb.debian.org|https://deb.debian.org|g' /etc/apt/sources.list.d/debian.sources; \
     CA=""; if [ -f /run/secrets/ca ]; then CA="-o Acquire::https::CAInfo=/run/secrets/ca"; fi; \
-    apt-get $CA update && apt-get $CA install -y --no-install-recommends xvfb x11vnc novnc websockify tzdata \
+    apt-get $CA update && apt-get $CA install -y --no-install-recommends xvfb x11vnc novnc websockify tzdata libatomic1 \
     && rm -rf /var/lib/apt/lists/*
 COPY --from=construtor /wheels /wheels
 RUN --mount=type=secret,id=ca,required=false \
