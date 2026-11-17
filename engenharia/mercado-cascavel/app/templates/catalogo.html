@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block conteudo %}
+<section class="mb-6 grid grid-cols-2 gap-3 sm:grid-cols-4">
+  <div class="kpi"><span>Produtos únicos</span><b>{{ "{:,}".format(resumo.produtos).replace(",", ".") }}</b></div>
+  <div class="kpi"><span>Em 2+ lojas (unificados)</span><b>{{ "{:,}".format(resumo.unificados).replace(",", ".") }}</b></div>
+  <div class="kpi"><span>Com EAN</span><b>{{ "{:,}".format(resumo.com_ean).replace(",", ".") }}</b></div>
+  <div class="kpi"><span>Última coleta</span><b class="text-base">{{ resumo.ultima_coleta[:16].replace("T", " ") if resumo.ultima_coleta else "ainda não" }}</b></div>
+</section>
+
+<form class="mb-5 flex flex-wrap items-center gap-2" hx-get="/" hx-target="#grade" hx-push-url="true"
+      hx-trigger="input changed delay:350ms from:input[name=q], change">
+  <input name="q" value="{{ q }}" placeholder="Buscar: café baggio 500g, detergente ypê, EAN…" class="campo w-full sm:w-auto sm:min-w-[22rem] sm:flex-1" autocomplete="off">
+  <select name="categoria" class="campo">
+    <option value="">Todas as categorias</option>
+    {% for c in categorias %}<option {{ 'selected' if c == categoria }}>{{ c }}</option>{% endfor %}
+  </select>
+  <select name="loja" class="campo">
+    <option value="">Todas as lojas</option>
+    {% for l in lojas if l.tipo == 'supermercado' %}<option value="{{ l.slug }}" {{ 'selected' if l.slug == loja }}>{{ l.nome }}</option>{% endfor %}
+  </select>
+  <select name="ordem" class="campo">
+    {% for v, r in [("relevancia","Mais lojas"),("menor_preco","Menor preço"),("maior_diferenca","Maior diferença entre lojas"),("nome","Nome")] %}
+    <option value="{{ v }}" {{ 'selected' if v == ordem }}>{{ r }}</option>{% endfor %}
+  </select>
+  <label class="flex items-center gap-2 text-sm text-zinc-400"><input type="checkbox" name="so_promo" value="true" {{ 'checked' if so_promo }} class="accent-emerald-400"> só promoções</label>
+</form>
+
+<div id="grade">{% include "parciais/grade.html" %}</div>
+{% endblock %}

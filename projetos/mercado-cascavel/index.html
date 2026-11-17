@@ -1,0 +1,143 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mercado Cascavel</title>
+<meta name="description" content="Agregador local-first de preços de supermercado: coleta resiliente, resolução de entidades entre lojas, carrinho otimizado com frete e checkout automatizado que para antes do pagamento.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/style.css">
+<script src="../../assets/app.js"></script>
+<style>
+  .er { counter-reset: passo; display: grid; gap: 10px; margin-top: 18px; }
+  .er .card { display: grid; grid-template-columns: 34px 1fr; gap: 12px; align-items: start; }
+  .er .card::before { counter-increment: passo; content: counter(passo); display: grid; place-items: center;
+    width: 30px; height: 30px; border-radius: 50%; background: var(--surface-2); font-weight: 600; }
+  .er h3 { margin: 0 0 4px; font-size: 16px; }
+  .er p { margin: 0; }
+  .vs { font-family: "JetBrains Mono", monospace; font-size: 13px; }
+  .grid > .card { min-width: 0; }
+  .ok { color: #2f9e6e; font-weight: 600; } .nao { color: #c4573a; font-weight: 600; }
+</style>
+</head>
+<body>
+<header class="nav"><div class="wrap">
+  <a class="brand" href="../../"><span class="mono">GD</span>Guilherme Dias</a>
+  <nav class="nav-links">
+    <a href="#telas">Telas</a>
+    <a href="#arquitetura" class="hide-sm">Arquitetura</a>
+    <a href="#entidades">Resolução de entidades</a>
+    <a href="#checkout" class="hide-sm">Checkout</a>
+    <a href="https://github.com/Guigarciarosa/guigarciarosa.github.io/tree/main/engenharia/mercado-cascavel" class="hide-sm">Código</a>
+  </nav>
+  <button class="theme-btn" onclick="alternarTema()" aria-label="Alternar tema">◐</button>
+</div></header>
+
+<main>
+<section class="hero" style="padding-bottom:28px"><div class="wrap">
+  <div class="eyebrow">Projeto 02 · Engenharia de dados + RPA</div>
+  <h1>Onde a compra do mês<br>sai mais barata em Cascavel?</h1>
+  <p class="lead">Um agregador de preços que roda em casa. Toda madrugada ele lê o catálogo dos supermercados da cidade, reconhece que "CAFE BAGGIO GOURMET 500G" e "Café Torrado e Moído Baggio Gourmet 500g" são o mesmo produto, e monta o carrinho mais barato, já contando o frete. No fim, um robô deixa os carrinhos prontos nas lojas e para na tela de pagamento. Quem paga é a pessoa.</p>
+  <div class="tags" style="margin-top:16px">
+    <span class="tag">Python</span><span class="tag">FastAPI</span><span class="tag">SQLite WAL</span><span class="tag">RapidFuzz</span><span class="tag">curl_cffi / httpx</span><span class="tag">GraphQL</span><span class="tag">VTEX</span><span class="tag">Playwright</span><span class="tag">HTMX + Alpine</span><span class="tag">Tailwind</span><span class="tag">Docker</span>
+  </div>
+</div></section>
+
+<section><div class="wrap">
+  <div class="grid grid-4">
+    <div class="card stat"><div class="big-number">7</div><p class="small muted">lojas físicas cobertas (4 filiais Irani, Muffato, Festval, Muffatão*)</p></div>
+    <div class="card stat"><div class="big-number">3</div><p class="small muted">plataformas de e-commerce lidas pela API JSON que a própria vitrine usa</p></div>
+    <div class="card stat"><div class="big-number">≥ 88%</div><p class="small muted">de similaridade, e mesmo peso/volume, para dois nomes virarem um produto</p></div>
+    <div class="card stat"><div class="big-number">0</div><p class="small muted">pagamentos feitos pelo robô: ele é bloqueado no código, na rede e no clique</p></div>
+  </div>
+  <p class="small muted" style="margin-top:10px">* O Muffatão bloqueia clientes automatizados. O sistema respeita isso e mantém a loja desligada até existir um caminho autorizado.</p>
+</div></section>
+
+<section id="telas"><div class="wrap">
+  <h2>As telas</h2>
+  <p class="muted">Prints com <b>dados de demonstração</b> (preços fictícios). Clique para ampliar.</p>
+  <div class="gallery" style="margin-top:18px">
+    <figure><img src="prints/catalogo.png" alt="Catálogo com preço por loja e selo de menor preço" onclick="zoom(this)"><figcaption>Catálogo: um card por <code>id_produto</code>, preço de cada loja lado a lado e o menor em destaque.</figcaption></figure>
+    <figure><img src="prints/carrinho.png" alt="Carrinho dividido entre lojas com economia" onclick="zoom(this)"><figcaption>Carrinho: loja única x dividido, com frete e a diferença para a 2ª melhor oferta.</figcaption></figure>
+    <figure><img src="prints/coleta.png" alt="Painel de coleta com barras de progresso por loja" onclick="zoom(this)"><figcaption>Coleta ao vivo (SSE): progresso por loja, unificados, preços alterados, bloqueios e logs filtráveis.</figcaption></figure>
+    <figure><img src="prints/produto.png" alt="Página do produto com histórico" onclick="zoom(this)"><figcaption>Produto: histórico de preço por loja e como cada SKU foi unificado (EAN, rede ou fuzzy com score).</figcaption></figure>
+  </div>
+</div></section>
+
+<section id="arquitetura"><div class="wrap">
+  <div class="eyebrow">Como funciona</div>
+  <h2>Da vitrine da loja ao carrinho pronto</h2>
+  <div class="flow" style="margin-top:24px">
+    <div class="card step"><div class="n">01 · coleta 03:00</div><h3>APIs das vitrines</h3><p class="small muted">VTEX (catálogo por categoria, total pelo header <code>resources</code>), VTEX IO Intelligent Search com <code>regionId</code> do CEP de Cascavel e GraphQL federado da Mercafácil para as 4 filiais. Jitter, rotação de User-Agent, backoff em 429 e parada em bloqueio.</p></div>
+    <div class="card step"><div class="n">02 · resolução</div><h3>Um produto, um id</h3><p class="small muted"><code>matcher.py</code> decide se o item já existe: SKU visto, chave da rede, EAN válido ou fuzzy com travas. Só produto novo baixa imagem, uma vez.</p></div>
+    <div class="card step"><div class="n">03 · série temporal</div><h3>Histórico enxuto</h3><p class="small muted">Linha nova só quando preço, promoção ou estoque mudam. Coletas iguais apenas carimbam a verificação. Uma tabela materializada guarda o "preço agora".</p></div>
+    <div class="card step"><div class="n">04 · decisão + RPA</div><h3>Carrinho e checkout</h3><p class="small muted">Otimizador exato com frete e pedido mínimo. Playwright com perfis persistentes monta os carrinhos em paralelo e entrega as abas na revisão.</p></div>
+  </div>
+
+  <div class="grid grid-2" style="margin-top:28px">
+    <div class="card">
+      <h3>O que a sondagem das lojas revelou</h3>
+      <div class="table-wrap"><table>
+        <thead><tr><th>Loja</th><th>Plataforma</th><th>Detalhe que mudou o design</th></tr></thead>
+        <tbody>
+          <tr><td>Super Muffato</td><td>VTEX</td><td>preço por canal de venda (<code>sc=22</code>), não por CEP</td></tr>
+          <tr><td>Festval</td><td>VTEX IO</td><td>a busca legada ignora a região; o mesmo café custa diferente em Cascavel e Curitiba</td></tr>
+          <tr><td>Irani (4 filiais)</td><td>Mercafácil</td><td>sem EAN e com id diferente por filial; o <code>modelId</code> é o mesmo nas quatro</td></tr>
+          <tr><td>Muffatão</td><td>Instabuy</td><td>bloqueia robôs: fica desligado (sem disfarce)</td></tr>
+        </tbody>
+      </table></div>
+    </div>
+    <div class="card">
+      <h3>Por que não "cada item na loja mais barata"?</h3>
+      <p class="small muted">Porque o frete entra na conta. Economizar R$ 3 num item e pagar R$ 9,90 de entrega em mais uma loja é prejuízo. Com até ~10 lojas, enumerar os subconjuntos de até 4 lojas (no máximo 385) dá a resposta exata em milissegundos: cada item vai para a loja mais barata <i>dentro do subconjunto</i>, respeitando pedido mínimo, e vence o menor <code>itens + fretes</code>.</p>
+      <p class="small muted">A tela mostra os três números: melhor loja única, divisão otimizada e a divisão ingênua, para deixar claro quanto o frete muda a decisão.</p>
+    </div>
+  </div>
+</div></section>
+
+<section id="entidades"><div class="wrap">
+  <div class="eyebrow">Resolução de entidades</div>
+  <h2>Quando dois nomes são o mesmo produto</h2>
+  <p class="muted">A regra de ouro do banco: produto idêntico em lojas diferentes tem o mesmo <code>id_produto</code>; só o registro de preço varia por loja. Cada item coletado passa por esta cascata:</p>
+  <div class="er">
+    <div class="card"><div><h3>SKU já vinculado</h3><p class="small muted">A segunda coleta não refaz trabalho: o vínculo SKU → produto fica gravado com o método e o score.</p></div></div>
+    <div class="card"><div><h3>Chave da rede</h3><p class="small muted"><code>mercafacil:&lt;modelId&gt;</code> une as filiais Irani, que não expõem EAN.</p></div></div>
+    <div class="card"><div><h3>EAN / GTIN</h3><p class="small muted">Validado pelo dígito verificador e normalizado (GTIN-14 → 13). Código de balança, como "1311" do pão francês, é descartado.</p></div></div>
+    <div class="card"><div><h3>Fuzzy com travas</h3><p class="small muted">Média de <code>token_sort</code> e <code>token_set</code> do RapidFuzz ≥ 88, comparando só dentro do mesmo bloco de medida <code>(pacote, valor, unidade)</code>. Recusa se as marcas, os números do nome, os descritores de variante (integral, zero, limão…) ou os EANs divergem.</p></div></div>
+  </div>
+  <div class="card" style="margin-top:18px">
+    <div class="table-wrap"><table class="vs">
+      <thead><tr><th>Loja A</th><th>Loja B</th><th>Resultado</th></tr></thead>
+      <tbody>
+        <tr><td>Café Torrado e Moído Baggio Gourmet 500g</td><td>CAFE BAGGIO GOURMET 500G</td><td class="ok">mesmo produto</td></tr>
+        <tr><td>Café Baggio Gourmet 500g</td><td>Café Baggio Gourmet 1kg</td><td class="nao">500g ≠ 1kg</td></tr>
+        <tr><td>Café Baggio Gourmet 500g</td><td>Café Baggio Gourmet 2x500g</td><td class="nao">pacote diferente</td></tr>
+        <tr><td>Detergente Ypê Neutro 500ml</td><td>Detergente Ypê Limão 500ml</td><td class="nao">variante diferente</td></tr>
+        <tr><td>Leite Integral Piracanjuba 1L</td><td>Leite Desnatado Piracanjuba 1L</td><td class="nao">variante diferente</td></tr>
+      </tbody>
+    </table></div>
+    <p class="small muted" style="margin-top:10px">Todos esses casos são testes automatizados (34 testes, HTTP simulado, rodando também na imagem Docker).</p>
+  </div>
+</div></section>
+
+<section id="checkout"><div class="wrap">
+  <div class="eyebrow">RPA com freio de mão</div>
+  <h2>O robô monta o carrinho. Você paga.</h2>
+  <div class="grid grid-3" style="margin-top:18px">
+    <div class="card"><h3>Sessões persistentes</h3><p class="small muted">Um perfil do Chromium por loja, abertos ao mesmo tempo. Login com credenciais cifradas (Fernet, chave fora do banco) ou cookies salvos. A tela do navegador é acessível por noVNC para a pessoa assumir.</p></div>
+    <div class="card"><h3>Deep link quando dá</h3><p class="small muted">Na VTEX o carrinho inteiro entra num link <code>/checkout/cart/add?sku=…&amp;qty=…&amp;seller=…</code>, o que também vira um plano B sem robô: abrir os carrinhos no próprio navegador.</p></div>
+    <div class="card"><h3>Três travas de pagamento</h3><p class="small muted">Não existe passo de pagamento no código; uma rota de rede aborta POSTs de transação enquanto o robô controla a aba; e todo clique recusa botões como "Finalizar pedido" ou "Pagar". O teste ponta a ponta usa uma loja falsa que tenta fechar o pedido sozinha, e nenhum POST chega.</p></div>
+  </div>
+  <p class="small" style="margin-top:22px"><a href="https://github.com/Guigarciarosa/guigarciarosa.github.io/tree/main/engenharia/mercado-cascavel">Ver o código e o README completo →</a></p>
+</div></section>
+</main>
+
+<div class="lightbox" id="lb" onclick="this.classList.remove('on')"><img alt=""></div>
+<footer><div class="wrap">© <span id="ano-atual"></span> Guilherme Dias · Prints com dados de demonstração. Marcas citadas pertencem aos seus donos; o projeto é pessoal e sem fins comerciais.</div></footer>
+<script>
+function zoom(img) { const lb = document.getElementById("lb"); lb.querySelector("img").src = img.src; lb.classList.add("on"); }
+const a = document.getElementById("ano-atual"); if (a) a.textContent = new Date().getFullYear();
+</script>
+</body>
+</html>

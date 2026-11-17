@@ -1,0 +1,10 @@
+.git
+.env
+dados
+tests
+scripts
+estilo
+node_modules
+**/__pycache__
+.pytest_cache
+*.db*

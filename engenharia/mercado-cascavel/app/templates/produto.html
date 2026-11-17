@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+{% block titulo %}{{ produto.nome_exibicao }} · Mercado Cascavel{% endblock %}
+{% block conteudo %}
+<a href="/" class="mb-4 inline-block text-sm text-zinc-500 hover:text-zinc-300">← catálogo</a>
+<div class="grid gap-6 lg:grid-cols-[320px_1fr]">
+  <div class="grid aspect-square place-items-center rounded-2xl bg-white">
+    {% if produto.imagem_local_path %}<img src="/media/produtos/{{ produto.imagem_local_path }}" class="h-full w-full object-contain p-6" alt="">{% else %}<span class="text-6xl">🛒</span>{% endif %}
+  </div>
+  <div>
+    <h1 class="text-2xl font-semibold text-white">{{ produto.nome_exibicao }}</h1>
+    <p class="mt-1 text-sm text-zinc-500">id_produto {{ produto.id_produto }} · {{ produto.marca or "sem marca" }} · {{ produto.categoria or "" }}{% if produto.ean_gtin %} · EAN {{ produto.ean_gtin }}{% endif %}</p>
+    <p class="mt-1 font-mono text-xs text-zinc-600">{{ produto.nome_normalizado }}</p>
+
+    <div class="mt-5 overflow-hidden rounded-2xl border border-white/5">
+      <table class="w-full text-sm">
+        <thead class="bg-white/5 text-left text-xs uppercase tracking-wide text-zinc-500"><tr><th class="px-4 py-2">Loja</th><th class="px-4 py-2 text-right">Preço</th><th class="hidden px-4 py-2 sm:table-cell">Visto em</th><th></th></tr></thead>
+        <tbody>
+        {% for p in precos %}
+          <tr class="border-t border-white/5 {{ 'bg-emerald-400/5' if p.menor }}">
+            <td class="px-4 py-2.5">{{ p.loja }} {% if p.menor %}<span class="selo ml-1">menor preço</span>{% endif %}{% if not p.disponivel %}<span class="ml-1 text-xs text-red-300">indisponível</span>{% endif %}</td>
+            <td class="px-4 py-2.5 text-right font-semibold {{ 'text-emerald-300' if p.menor else 'text-zinc-100' }}">{% if p.preco_promocional %}<s class="mr-1 text-xs font-normal text-zinc-500">{{ p.preco | brl }}</s>{% endif %}{{ p.preco_efetivo | brl }}</td>
+            <td class="hidden px-4 py-2.5 text-xs text-zinc-500 sm:table-cell">{{ p.ultima_verificacao[:16].replace("T"," ") }}</td>
+            <td class="px-4 py-2.5 text-right">{% if p.url_produto_loja %}<a href="{{ p.url_produto_loja }}" target="_blank" rel="noopener" class="text-xs text-zinc-400 underline hover:text-white">abrir</a>{% endif %}</td>
+          </tr>
+        {% endfor %}
+        </tbody>
+      </table>
+    </div>
+
+    <form class="mt-4 flex items-center gap-2" hx-post="/carrinho/{{ produto.id_produto }}" hx-swap="none">
+      <input type="number" name="quantidade" value="1" min="1" class="campo w-20">
+      <button class="botao">Adicionar ao carrinho</button>
+    </form>
+
+    <h2 class="mb-2 mt-8 text-sm font-semibold uppercase tracking-wide text-zinc-500">Histórico de preço</h2>
+    <div id="grafico" class="h-56 rounded-2xl border border-white/5 bg-cartao p-3" data-series='{{ series }}'></div>
+
+    <h2 class="mb-2 mt-8 text-sm font-semibold uppercase tracking-wide text-zinc-500">Como foi unificado</h2>
+    <ul class="space-y-1 text-sm">
+      {% for v in vinculos %}
+      <li class="flex flex-wrap gap-2 text-zinc-400"><span class="text-zinc-200">{{ v.loja }}</span> SKU {{ v.sku_loja }} · <span class="selo-neutro">{{ v.metodo_match }}{% if v.score and v.metodo_match == 'fuzzy' %} {{ v.score | round(1) }}%{% endif %}</span> <span class="truncate text-zinc-500">"{{ v.nome_loja }}"</span></li>
+      {% endfor %}
+    </ul>
+  </div>
+</div>
+<script>document.addEventListener("DOMContentLoaded", () => desenharHistorico(document.getElementById("grafico")));</script>
+{% endblock %}

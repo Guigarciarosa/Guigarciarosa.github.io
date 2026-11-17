@@ -1,0 +1,23 @@
+# segredos e dados locais: nunca versionar
+.env
+.env.*
+!.env.example
+*.db
+*.db-wal
+*.db-shm
+*.sqlite*
+dados/
+data/
+media/
+browser_profiles/
+logs/
+cookies*.json
+*.har
+# python
+__pycache__/
+*.pyc
+.pytest_cache/
+.venv/
+venv/
+# node (só para compilar o CSS)
+node_modules/

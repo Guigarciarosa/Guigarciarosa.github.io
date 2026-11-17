@@ -1,0 +1,108 @@
+{% extends "base.html" %}
+{% block titulo %}Carrinho · Mercado Cascavel{% endblock %}
+{% block conteudo %}
+<div x-data="carrinhoApp()" x-init="carregar()">
+  <div class="mb-5 flex flex-wrap items-center gap-3">
+    <h1 class="text-2xl font-semibold text-white">Carrinho</h1>
+    <div class="ml-auto inline-flex rounded-xl border border-white/10 p-1 text-sm">
+      <button @click="modo='unica'" :class="modo==='unica' ? 'bg-white/10 text-white' : 'text-zinc-400'" class="rounded-lg px-3 py-1.5">Loja única</button>
+      <button @click="modo='dividido'" :class="modo==='dividido' ? 'bg-white/10 text-white' : 'text-zinc-400'" class="rounded-lg px-3 py-1.5">Carrinho dividido</button>
+    </div>
+    <label class="flex items-center gap-2 text-sm text-zinc-400"><input type="checkbox" x-model="marketplaces" @change="carregar()" class="accent-emerald-400"> incluir marketplaces</label>
+  </div>
+
+  <template x-if="plano && plano.itens === 0">
+    <div class="rounded-2xl border border-dashed border-white/10 p-10 text-center text-zinc-500">Carrinho vazio. Adicione itens pelo <a href="/" class="text-verde underline">catálogo</a>.</div>
+  </template>
+
+  <template x-if="plano && plano.itens > 0">
+  <div class="grid gap-6 lg:grid-cols-[1fr_340px]">
+    <div>
+      <!-- LOJA ÚNICA -->
+      <div x-show="modo==='unica'" class="space-y-3">
+        <template x-for="(l, i) in plano.loja_unica" :key="l.slug">
+          <div class="rounded-2xl border bg-cartao p-4" :class="i===0 && l.completa ? 'border-emerald-400/40' : 'border-white/5'">
+            <div class="flex flex-wrap items-baseline gap-2">
+              <h3 class="font-semibold text-white" x-text="l.loja"></h3>
+              <span x-show="i===0 && l.completa" class="selo">mais barata para a cesta</span>
+              <span x-show="!l.completa" class="text-xs text-amber-300" x-text="'faltam ' + l.faltam.length + ' itens'"></span>
+              <span class="ml-auto text-lg font-semibold" :class="i===0 && l.completa ? 'text-emerald-300' : 'text-zinc-100'" x-text="brl(l.total)"></span>
+            </div>
+            <p class="text-xs text-zinc-500" x-text="'itens ' + brl(l.subtotal) + ' + entrega ' + brl(l.taxa)"></p>
+            <details class="mt-2 text-sm"><summary class="cursor-pointer text-zinc-400">ver itens</summary>
+              <ul class="mt-2 space-y-1"><template x-for="it in l.itens"><li class="flex justify-between gap-2 text-zinc-300"><span class="truncate" x-text="it.quantidade + '× ' + it.nome"></span><span x-text="brl(it.total)"></span></li></template></ul>
+              <p x-show="l.faltam.length" class="mt-2 text-xs text-amber-300" x-text="'Sem oferta: ' + l.faltam.join(', ')"></p>
+            </details>
+            <div class="mt-3 flex gap-2" x-show="l.completa">
+              <button class="botao text-xs" @click="checkout('unica', l.slug)">Finalizar compra nesta loja</button>
+              <button class="botao-sec text-xs" @click="links('unica', l.slug)">Só abrir links</button>
+            </div>
+          </div>
+        </template>
+      </div>
+
+      <!-- DIVIDIDO -->
+      <div x-show="modo==='dividido'" class="space-y-3">
+        <template x-if="plano.dividido">
+          <div class="space-y-3">
+            <template x-for="g in plano.dividido.grupos" :key="g.slug">
+              <div class="rounded-2xl border border-white/5 bg-cartao p-4">
+                <div class="flex items-baseline gap-2"><h3 class="font-semibold text-white" x-text="g.loja"></h3><span class="ml-auto font-semibold" x-text="brl(g.total)"></span></div>
+                <p class="mb-2 text-xs text-zinc-500" x-text="'itens ' + brl(g.subtotal) + ' + entrega ' + brl(g.taxa)"></p>
+                <ul class="space-y-1.5 text-sm">
+                  <template x-for="it in g.itens" :key="it.id_produto">
+                    <li class="flex items-center gap-2">
+                      <img :src="it.imagem ? '/media/produtos/' + it.imagem : '/static/icone.svg'" class="h-9 w-9 rounded-md bg-white object-contain p-0.5" alt="">
+                      <span class="min-w-0 flex-1 truncate text-zinc-300" x-text="it.nome"></span>
+                      <input type="number" min="0" :value="it.quantidade" @change="qtd(it.id_produto, $event.target.value)" class="campo w-16 py-1 text-xs">
+                      <span class="w-24 text-right text-zinc-100" x-text="brl(it.total)"></span>
+                      <span x-show="it.segunda_melhor" class="hidden w-28 text-right text-[11px] text-emerald-300 sm:inline" x-text="'-' + brl((it.segunda_melhor - it.preco) * it.quantidade) + ' vs 2ª'"></span>
+                    </li>
+                  </template>
+                </ul>
+              </div>
+            </template>
+            <p x-show="plano.dividido.sem_oferta.length" class="text-sm text-amber-300" x-text="'Sem oferta em nenhuma loja: ' + plano.dividido.sem_oferta.join(', ')"></p>
+          </div>
+        </template>
+      </div>
+    </div>
+
+    <aside class="h-fit space-y-3 rounded-2xl border border-white/5 bg-cartao p-4 lg:sticky lg:top-20">
+      <h2 class="text-sm font-semibold uppercase tracking-wide text-zinc-500">Resumo</h2>
+      <div class="flex justify-between text-sm"><span class="text-zinc-400">Melhor loja única</span><span x-text="plano.melhor_unica ? brl(plano.melhor_unica.total) + ' (' + plano.melhor_unica.loja + ')' : 'nenhuma loja tem tudo'"></span></div>
+      <div class="flex justify-between text-sm"><span class="text-zinc-400">Dividido (otimizado)</span><span x-text="plano.dividido ? brl(plano.dividido.total) + ' em ' + plano.dividido.grupos.length + ' loja(s)' : '—'"></span></div>
+      <div class="flex justify-between text-xs text-zinc-500" x-show="plano.dividido"><span>Cada item no mais barato, sem pensar em frete</span><span x-text="plano.dividido ? brl(plano.dividido.ingenuo_total) : ''"></span></div>
+      <div class="rounded-xl bg-emerald-400/10 p-3 text-center" x-show="plano.economia !== null">
+        <p class="text-xs text-emerald-200">Economia dividindo</p>
+        <p class="text-2xl font-semibold text-emerald-300" x-text="brl(plano.economia)"></p>
+      </div>
+      <button class="botao w-full" x-show="modo==='dividido' && plano.dividido" @click="checkout('dividido')">Checkout / Finalizar compra</button>
+      <button class="botao-sec w-full" x-show="modo==='dividido' && plano.dividido" @click="links('dividido')">Abrir carrinhos no meu navegador</button>
+      <p class="text-[11px] leading-4 text-zinc-500">O robô entra nas lojas, monta os carrinhos e para na tela de revisão/pagamento. Ele nunca confirma pagamento: quem paga é você.</p>
+      <button class="text-xs text-zinc-500 underline" @click="limpar()">esvaziar carrinho</button>
+
+      <template x-if="sessoes.length">
+        <div class="space-y-2 border-t border-white/5 pt-3">
+          <h3 class="text-xs font-semibold uppercase text-zinc-500">Checkout em andamento</h3>
+          <template x-for="s in sessoes" :key="s.slug">
+            <div class="rounded-lg bg-white/5 p-2 text-xs">
+              <div class="flex justify-between"><b x-text="s.nome"></b><span :class="{'text-emerald-300': s.status==='pronto', 'text-red-300': s.status==='erro'}" x-text="s.status"></span></div>
+              <p class="text-zinc-400" x-text="s.mensagem"></p>
+              <template x-for="a in s.alertas"><p class="text-amber-300" x-text="a"></p></template>
+            </div>
+          </template>
+          <p class="text-[11px] text-zinc-500">As abas ficam abertas no navegador do servidor (noVNC).</p>
+        </div>
+      </template>
+      <template x-if="abrir.length">
+        <div class="space-y-1 border-t border-white/5 pt-3 text-xs">
+          <template x-for="l in abrir"><div><b x-text="l.loja"></b>: <a x-show="l.link_carrinho" :href="l.link_carrinho" target="_blank" class="text-verde underline">montar carrinho</a>
+            <template x-if="!l.link_carrinho"><span><template x-for="p in l.produtos"><a :href="p.url" target="_blank" class="mr-1 underline" x-text="p.quantidade + '× ' + p.nome.slice(0, 24)"></a></template></span></template></div></template>
+        </div>
+      </template>
+    </aside>
+  </div>
+  </template>
+</div>
+{% endblock %}

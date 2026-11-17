@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% block titulo %}Watchlist · Mercado Cascavel{% endblock %}
+{% block conteudo %}
+<h1 class="mb-1 text-2xl font-semibold text-white">Watchlist de marketplaces</h1>
+<p class="mb-5 text-sm text-zinc-500">Itens recorrentes buscados na Amazon, Mercado Livre e Shopee durante a coleta noturna (ou agora, no botão). Vincule a um id_produto para o preço entrar no comparador.</p>
+<form method="post" action="/watchlist" class="mb-6 flex flex-wrap gap-2">
+  <input name="termo_busca" required placeholder='ex.: Café Gourmet Baggio 500g' class="campo min-w-0 flex-1">
+  <input name="id_produto" placeholder="id_produto (opcional)" class="campo w-44">
+  <button class="botao">Adicionar e buscar</button>
+</form>
+<div class="space-y-4">
+{% for w in itens %}
+  <div class="rounded-2xl border border-white/5 bg-cartao p-4 {{ 'opacity-50' if not w.ativo }}">
+    <div class="flex flex-wrap items-center gap-2">
+      <b class="text-white">"{{ w.termo_busca }}"</b>
+      {% if w.produto %}<a href="/produto/{{ w.id_produto_vinculado }}" class="selo">→ {{ w.produto }}</a>{% endif %}
+      <div class="ml-auto flex gap-1">
+        <button class="botao-sec px-2 py-1 text-xs" hx-post="/watchlist/{{ w.id }}/buscar" hx-swap="none">buscar agora</button>
+        <form method="post" action="/watchlist/{{ w.id }}/vincular" class="flex gap-1"><input name="id_produto" value="{{ w.id_produto_vinculado or '' }}" placeholder="id_produto" class="campo w-24 py-1 text-xs"><button class="botao-sec px-2 py-1 text-xs">vincular</button></form>
+        <form method="post" action="/watchlist/{{ w.id }}/alternar"><button class="botao-sec px-2 py-1 text-xs">{{ 'pausar' if w.ativo else 'ativar' }}</button></form>
+        <form method="post" action="/watchlist/{{ w.id }}/apagar"><button class="px-2 py-1 text-xs text-red-300">apagar</button></form>
+      </div>
+    </div>
+    {% if w.resultados %}
+    <div class="mt-3 grid gap-2 sm:grid-cols-2 lg:grid-cols-4">
+      {% for r in w.resultados[:8] %}
+      <a href="{{ r.url }}" target="_blank" rel="noopener" class="flex gap-2 rounded-xl border border-white/5 p-2 hover:border-white/15 {{ 'border-emerald-400/40' if loop.first }}">
+        {% if r.imagem_url %}<img src="{{ r.imagem_url }}" loading="lazy" referrerpolicy="no-referrer" class="h-14 w-14 rounded-md bg-white object-contain" alt="">{% endif %}
+        <div class="min-w-0 text-xs"><p class="line-clamp-2 text-zinc-300">{{ r.titulo }}</p><p class="mt-1"><b class="{{ 'text-emerald-300' if loop.first else 'text-zinc-100' }}">{{ r.preco | brl }}</b> <span class="text-zinc-500">{{ r.loja }} · {{ r.score | round | int }}%</span></p></div>
+      </a>
+      {% endfor %}
+    </div>
+    {% else %}<p class="mt-2 text-xs text-zinc-500">Sem resultados ainda.</p>{% endif %}
+  </div>
+{% else %}
+  <p class="text-zinc-500">Nenhum termo ainda.</p>
+{% endfor %}
+</div>
+{% endblock %}

@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+{% block titulo %}Coleta · Mercado Cascavel{% endblock %}
+{% block conteudo %}
+<div x-data='painelColeta({{ progresso | tojson }}, {{ logs | tojson }})' x-init="conectar()">
+  <div class="mb-5 flex flex-wrap items-center gap-3">
+    <h1 class="text-2xl font-semibold text-white">Status da extração e logs</h1>
+    <span class="text-xs" :class="online ? 'text-emerald-300' : 'text-zinc-500'" x-text="online ? '● ao vivo' : '○ reconectando'"></span>
+    <span class="text-xs text-zinc-500">{% if proxima %}próxima coleta automática: {{ proxima }}{% endif %}</span>
+    <button class="botao ml-auto" @click="sync('')">Sincronizar tudo agora</button>
+  </div>
+
+  <section class="mb-6 grid grid-cols-2 gap-3 sm:grid-cols-5">
+    <div class="kpi"><span>Lidos</span><b x-text="soma('lidos')"></b></div>
+    <div class="kpi"><span>Produtos novos</span><b x-text="soma('novos')"></b></div>
+    <div class="kpi"><span>Unificados</span><b class="text-emerald-300" x-text="soma('unificados')"></b></div>
+    <div class="kpi"><span>Preços alterados</span><b x-text="soma('precos_atualizados')"></b></div>
+    <div class="kpi"><span>Erros / bloqueios</span><b class="text-red-300" x-text="soma('erros') + ' / ' + soma('bloqueios')"></b></div>
+  </section>
+
+  <section class="mb-8 grid gap-3 md:grid-cols-2">
+    {% for l in lojas if l.tipo == 'supermercado' %}
+    <div class="rounded-2xl border border-white/5 bg-cartao p-4" x-data="{ slug: '{{ l.slug }}' }">
+      <div class="mb-2 flex items-center gap-2">
+        <b class="text-white">{{ l.nome }}</b><span class="selo-neutro">{{ l.plataforma }}</span>
+        {% if not l.ativo %}<span class="text-xs text-zinc-500">desativada</span>{% endif %}
+        <span class="ml-auto text-xs" :class="cor(p(slug).status)" x-text="p(slug).status || 'parado'"></span>
+        <button class="botao-sec px-2 py-1 text-xs" @click="sync(slug)">Sync</button>
+      </div>
+      <div class="h-2 overflow-hidden rounded-full bg-white/5"><div class="h-full rounded-full bg-verde transition-all" :style="'width:' + (p(slug).pct || 0) + '%'"></div></div>
+      <p class="mt-1.5 font-mono text-xs text-zinc-400" x-text="linha(p(slug), '{{ l.nome }}')"></p>
+      <p class="text-[11px] text-zinc-500" x-show="p(slug).lidos" x-text="'novos ' + p(slug).novos + ' · unificados ' + p(slug).unificados + ' · preços alterados ' + p(slug).precos_atualizados + ' · erros ' + p(slug).erros + ' · bloqueios ' + p(slug).bloqueios"></p>
+      <p class="text-[11px] text-amber-300" x-show="p(slug).mensagem" x-text="p(slug).mensagem"></p>
+    </div>
+    {% endfor %}
+    <div class="rounded-2xl border border-white/5 bg-cartao p-4">
+      <div class="mb-2 flex items-center gap-2"><b class="text-white">Marketplaces (watchlist)</b><span class="ml-auto text-xs" :class="cor(p('marketplaces').status)" x-text="p('marketplaces').status || 'parado'"></span><button class="botao-sec px-2 py-1 text-xs" @click="sync('marketplaces')">Sync</button></div>
+      <div class="h-2 overflow-hidden rounded-full bg-white/5"><div class="h-full rounded-full bg-sky-400 transition-all" :style="'width:' + (p('marketplaces').pct || 0) + '%'"></div></div>
+      <p class="mt-1.5 font-mono text-xs text-zinc-400" x-text="linha(p('marketplaces'), 'Buscas')"></p>
+    </div>
+  </section>
+
+  <section class="rounded-2xl border border-white/5 bg-cartao">
+    <div class="flex flex-wrap items-center gap-2 border-b border-white/5 p-3">
+      <h2 class="mr-2 text-sm font-semibold text-white">Logs</h2>
+      <template x-for="n in ['', 'INFO', 'WARNING', 'ERROR']"><button @click="nivel = n" class="rounded-lg px-2 py-1 text-xs" :class="nivel === n ? 'bg-white/10 text-white' : 'text-zinc-400'" x-text="n || 'TODOS'"></button></template>
+      <input x-model="busca" placeholder="filtrar texto ou loja" class="campo ml-auto py-1 text-xs">
+      <label class="flex items-center gap-1 text-xs text-zinc-400"><input type="checkbox" x-model="seguir" class="accent-emerald-400"> seguir</label>
+    </div>
+    <div class="h-[28rem] overflow-y-auto p-3 font-mono text-[12px] leading-5" x-ref="caixa">
+      <template x-for="l in filtrados()" :key="l.id || l.ts + l.mensagem">
+        <div class="flex gap-2"><span class="shrink-0 text-zinc-600" x-text="(l.ts || '').slice(11, 19)"></span>
+          <span class="w-16 shrink-0" :class="{'text-red-400': l.nivel==='ERROR', 'text-amber-300': l.nivel==='WARNING', 'text-sky-300': l.nivel==='INFO'}" x-text="l.nivel"></span>
+          <span class="w-36 shrink-0 truncate text-zinc-500" x-text="l.origem"></span><span class="text-zinc-300" x-text="l.mensagem"></span></div>
+      </template>
+    </div>
+  </section>
+
+  <h2 class="mb-2 mt-8 text-sm font-semibold uppercase tracking-wide text-zinc-500">Execuções recentes</h2>
+  <div class="overflow-x-auto rounded-2xl border border-white/5">
+    <table class="w-full text-xs"><thead class="bg-white/5 text-left text-zinc-500"><tr>{% for h in ["Loja","Início","Status","Lidos","Novos","Unificados","Preços alterados","Erros","Bloqueios"] %}<th class="px-3 py-2">{{ h }}</th>{% endfor %}</tr></thead>
+    <tbody>{% for e in execucoes %}<tr class="border-t border-white/5 text-zinc-300"><td class="px-3 py-1.5">{{ e.loja or "-" }}</td><td class="px-3 py-1.5">{{ e.inicio[:16].replace("T"," ") }}</td><td class="px-3 py-1.5">{{ e.status }}</td><td class="px-3 py-1.5">{{ e.lidos }}</td><td class="px-3 py-1.5">{{ e.novos }}</td><td class="px-3 py-1.5">{{ e.unificados }}</td><td class="px-3 py-1.5">{{ e.precos_atualizados }}</td><td class="px-3 py-1.5">{{ e.erros }}</td><td class="px-3 py-1.5">{{ e.bloqueios }}</td></tr>{% endfor %}</tbody></table>
+  </div>
+</div>
+{% endblock %}
