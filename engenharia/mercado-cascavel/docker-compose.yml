@@ -1,0 +1,29 @@
+# Mercado Cascavel em um servidor doméstico. Suba com: docker compose up -d --build 
+services:
+  mercado:
+    build: .
+    image: mercado:latest
+    container_name: mercado
+    restart: unless-stopped
+    env_file: .env
+    environment:
+      MERCADO_DATA: /data
+      TZ: America/Sao_Paulo
+      HOME: /tmp            # o UID do host pode não existir na imagem (sem home gravável)
+    ports:
+      - "${BIND_IP:-127.0.0.1}:${PORTA_HOST:-8100}:8100"   # painel
+      - "${BIND_IP:-127.0.0.1}:${PORTA_VNC:-8101}:6080"    # noVNC (ver as abas do checkout)
+    volumes:
+      - ${DADOS:-./dados}/db:/data/db
+      - ${DADOS:-./dados}/media:/data/media
+      - ${DADOS:-./dados}/browser_profiles:/data/browser_profiles
+      - ${DADOS:-./dados}/logs:/data/logs
+    user: "${UID_GID:-1000:1000}"
+    mem_limit: 1.5g
+    shm_size: 512m          # o Chromium usa /dev/shm; 64 MB (padrão) derruba abas
+    cpus: 2.0               # deixa folga para os outros apps no Ryzen 3
+    security_opt:
+      - no-new-privileges:true
+    logging:
+      driver: json-file
+      options: { max-size: "10m", max-file: "3" }

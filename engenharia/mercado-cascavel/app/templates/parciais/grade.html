@@ -1,0 +1,43 @@
+<p class="mb-3 text-sm text-zinc-500">{{ "{:,}".format(cat.total).replace(",", ".") }} produtos</p>
+{% if not cat.itens %}
+<div class="rounded-2xl border border-dashed border-white/10 p-10 text-center text-zinc-500">
+  Nada por aqui ainda. Rode a primeira coleta em <a href="/coleta" class="text-verde underline">Coleta</a>.
+</div>
+{% endif %}
+<div class="grid grid-cols-2 gap-3 md:grid-cols-3 xl:grid-cols-4">
+{% for p in cat.itens %}
+  <article class="group flex flex-col rounded-2xl border border-white/5 bg-cartao p-3 transition hover:border-white/15">
+    <a href="/produto/{{ p.id_produto }}" class="relative mb-3 grid aspect-square place-items-center overflow-hidden rounded-xl bg-white">
+      {% if p.imagem_local_path %}<img loading="lazy" src="/media/produtos/{{ p.imagem_local_path }}" alt="" class="h-full w-full object-contain p-2">
+      {% else %}<span class="text-4xl text-zinc-300">🛒</span>{% endif %}
+      {% if p.n_lojas > 1 and p.maior > p.menor %}
+      <span class="absolute left-2 top-2 rounded-full bg-black/80 px-2 py-0.5 text-[11px] font-medium text-emerald-300">até {{ (((p.maior - p.menor) / p.maior) * 100) | round | int }}% mais barato</span>
+      {% endif %}
+    </a>
+    <a href="/produto/{{ p.id_produto }}" class="line-clamp-2 min-h-[2.5rem] text-sm font-medium leading-5 text-zinc-100">{{ p.nome_exibicao }}</a>
+    <p class="mb-2 mt-0.5 text-xs text-zinc-500">{{ p.marca or "" }}{% if p.ean_gtin %} · EAN {{ p.ean_gtin }}{% endif %}</p>
+    <ul class="mb-3 space-y-1 text-[13px]">
+      {% for pr in p.precos[:4] %}
+      <li class="flex items-center justify-between gap-2 rounded-lg px-2 py-1 {{ 'bg-emerald-400/10 text-emerald-200' if pr.menor else 'text-zinc-400' }}">
+        <span class="truncate">{{ pr.loja }}</span>
+        <span class="whitespace-nowrap font-semibold {{ 'text-emerald-300' if pr.menor else 'text-zinc-200' }}">
+          {% if pr.preco_promocional %}<s class="mr-1 text-[11px] font-normal text-zinc-500">{{ pr.preco | brl }}</s>{% endif %}{{ pr.preco_efetivo | brl }}
+        </span>
+      </li>
+      {% endfor %}
+      {% if p.precos | length > 4 %}<li class="px-2 text-xs text-zinc-500">+{{ p.precos | length - 4 }} lojas</li>{% endif %}
+    </ul>
+    <div class="mt-auto flex items-center gap-2">
+      {% if p.n_lojas > 1 %}<span class="selo">Menor preço {{ p.menor | brl }}</span>{% endif %}
+      <button class="botao ml-auto px-3 py-1.5 text-xs" hx-post="/carrinho/{{ p.id_produto }}" hx-vals='{"quantidade": 1}' hx-swap="none">+ carrinho</button>
+    </div>
+  </article>
+{% endfor %}
+</div>
+{% if cat.paginas > 1 %}
+<nav class="mt-6 flex items-center justify-center gap-2 text-sm">
+  {% if link_anterior %}<a class="botao-sec" href="{{ link_anterior }}" hx-get="{{ link_anterior }}" hx-target="#grade" hx-push-url="true" hx-on::after-request="document.getElementById('grade').scrollIntoView({behavior: 'smooth'})">← anterior</a>{% endif %}
+  <span class="text-zinc-500">página {{ cat.pagina }} de {{ cat.paginas }}</span>
+  {% if link_proxima %}<a class="botao-sec" href="{{ link_proxima }}" hx-get="{{ link_proxima }}" hx-target="#grade" hx-push-url="true" hx-on::after-request="document.getElementById('grade').scrollIntoView({behavior: 'smooth'})">próxima →</a>{% endif %}
+</nav>
+{% endif %}

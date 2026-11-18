@@ -1,0 +1,15 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer components {
+  .campo { @apply rounded-xl border border-white/10 bg-white/5 px-3 py-2 text-sm text-zinc-100 placeholder-zinc-500 outline-none focus:border-emerald-400/60 focus:ring-2 focus:ring-emerald-400/20; }
+  select.campo option { @apply bg-zinc-900; }
+  .botao { @apply inline-flex items-center justify-center rounded-xl bg-verde px-4 py-2 text-sm font-semibold text-black transition hover:brightness-110 active:scale-[.98] disabled:opacity-40; }
+  .botao-sec { @apply inline-flex items-center justify-center rounded-xl border border-white/10 px-4 py-2 text-sm text-zinc-200 transition hover:bg-white/5 disabled:opacity-40; }
+  .kpi { @apply flex flex-col gap-1 rounded-2xl border border-white/5 bg-cartao px-4 py-3; }
+  .kpi span { @apply text-xs text-zinc-500; }
+  .kpi b { @apply text-2xl font-semibold text-white; }
+  .selo { @apply inline-flex items-center rounded-full bg-emerald-400/15 px-2 py-0.5 text-[11px] font-medium text-emerald-300; }
+  .selo-neutro { @apply inline-flex items-center rounded-full bg-white/5 px-2 py-0.5 text-[11px] text-zinc-400; }
+}

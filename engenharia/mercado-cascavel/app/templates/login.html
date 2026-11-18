@@ -1,0 +1,11 @@
+<!doctype html>
+<html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Entrar · Mercado Cascavel</title><link rel="stylesheet" href="/static/app.css"></head>
+<body class="grid min-h-screen place-items-center bg-fundo text-zinc-200">
+  <form method="post" action="/login" class="w-80 space-y-4 rounded-2xl border border-white/10 bg-cartao p-6">
+    <div class="flex items-center gap-2"><img src="/static/icone.svg" class="h-8 w-8" alt=""><h1 class="text-lg font-semibold text-white">Mercado Cascavel</h1></div>
+    {% if erro %}<p class="rounded-lg bg-red-500/10 px-3 py-2 text-sm text-red-300">Senha incorreta.</p>{% endif %}
+    <input type="password" name="senha" autofocus placeholder="Senha do painel" class="campo w-full">
+    <button class="botao w-full">Entrar</button>
+  </form>
+</body></html>
