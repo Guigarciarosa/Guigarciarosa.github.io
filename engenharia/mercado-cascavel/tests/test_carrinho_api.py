@@ -112,3 +112,21 @@ def test_login_obrigatorio(cfg, monkeypatch):
         r = c.post("/login", data={"senha": "abc123"}, follow_redirects=False)
         assert r.status_code == 303
         assert c.get("/").status_code == 200
+
+
+def test_agendador_dispara_coleta_no_event_loop(cfg, monkeypatch):
+    """Regressão: o job era uma lambda síncrona; o APScheduler a rodava numa thread sem loop e nada acontecia."""
+    import asyncio
+    monkeypatch.setattr(cfg, "agendador", True)
+    from app import coleta, main
+    chamadas = []
+
+    async def falsa(con, incluir_marketplaces=True):
+        chamadas.append(1)
+        return []
+    monkeypatch.setattr(coleta, "coletar_todas", falsa)
+    with TestClient(main.app) as c:
+        job = main.app.state.agendador.get_job("coleta_noturna")
+        assert asyncio.iscoroutinefunction(job.func)
+        c.portal.call(job.func)
+    assert chamadas == [1]

@@ -67,6 +67,8 @@ def rotas_irani(req: httpx.Request) -> httpx.Response:
     u = urlparse(str(req.url))
     if u.netloc == "fed-gateway.mercafacil.com":
         assert req.headers["x-custom-origin"] == "irani.delivery"
+        if req.headers.get("apollo-require-preflight") != "true":   # o gateway real responde 400 sem ele
+            return httpx.Response(400, json={"errors": [{"message": "invalid query"}]})
         q = parse_qs(u.query)["query"][0]
         if "showcaseDepartments" in q:
             return httpx.Response(200, json={"data": {"showcaseDepartments": [{"id": "1905", "name": "Mercearia"},

@@ -43,7 +43,8 @@ class ColetorIrani(Coletor):
 
     async def gql(self, query: str) -> dict:
         r = await self.cliente.get(GATEWAY, params={"query": query},
-                                   headers={"x-custom-origin": self.origem, "Origin": "https://www.irani.delivery",
+                                   headers={"x-custom-origin": self.origem, "apollo-require-preflight": "true",
+                                            "Origin": "https://www.irani.delivery",
                                             "Referer": self.base + "/", "Accept": "application/json"})
         d = r.json()
         if d.get("errors") and not d.get("data"):

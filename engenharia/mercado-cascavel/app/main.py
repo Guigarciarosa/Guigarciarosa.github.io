@@ -55,7 +55,12 @@ async def ciclo(app: FastAPI):
     if cfg.agendador:
         from apscheduler.schedulers.asyncio import AsyncIOScheduler
         agendador = AsyncIOScheduler(timezone="America/Sao_Paulo")
-        agendador.add_job(lambda: _disparar(coleta.coletar_todas(con)), "cron", hour=cfg.cron_hora,
+        async def coleta_noturna() -> None:
+            # coroutine de propósito: o AsyncIOScheduler roda funções síncronas numa thread sem event loop
+            barramento.log("INFO", "agenda", "coleta noturna disparada")
+            await coleta.coletar_todas(con)
+
+        agendador.add_job(coleta_noturna, "cron", hour=cfg.cron_hora,
                           minute=cfg.cron_minuto, id="coleta_noturna", max_instances=1, coalesce=True,
                           misfire_grace_time=3600)
         agendador.start()
