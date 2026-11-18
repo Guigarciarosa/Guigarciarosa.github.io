@@ -4,6 +4,7 @@
   coletar [slug|todas]   roda a coleta agora, no terminal
   sondar <slug> [termo]  teste rápido de um coletor: busca um termo e mostra 5 itens
   gerar-chave            gera uma FERNET_KEY nova para o .env
+  reclassificar          reaplica a árvore de categorias (app/categorias.py) ao catálogo
 """
 from __future__ import annotations
 
@@ -32,6 +33,10 @@ def main(argv: list[str]) -> int:
     con = inicializar(conectar())
     barramento.ligar(con)
 
+    if cmd == "reclassificar":
+        from .categorias import reclassificar
+        print(f"{reclassificar(con)} produtos atualizados")
+        return 0
     if cmd == "coletar":
         from . import coleta
         alvo = argv[1] if len(argv) > 1 else "todas"

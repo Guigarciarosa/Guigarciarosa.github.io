@@ -12,7 +12,13 @@
   <input name="q" value="{{ q }}" placeholder="Buscar: café baggio 500g, detergente ypê, EAN…" class="campo w-full sm:w-auto sm:min-w-[22rem] sm:flex-1" autocomplete="off">
   <select name="categoria" class="campo">
     <option value="">Todas as categorias</option>
-    {% for c in categorias %}<option {{ 'selected' if c == categoria }}>{{ c }}</option>{% endfor %}
+    {% for c in categorias %}
+    <optgroup label="{{ c.nome }}">
+      <option value="{{ c.nome }}" {{ 'selected' if c.nome == categoria }}>{{ c.nome }}: tudo ({{ c.total }})</option>
+      {% for s in c.subs %}{% set v = c.nome ~ '|' ~ s.nome %}
+      <option value="{{ v }}" {{ 'selected' if v == categoria }}>{{ s.nome }} ({{ s.total }})</option>{% endfor %}
+    </optgroup>
+    {% endfor %}
   </select>
   <select name="loja" class="campo">
     <option value="">Todas as lojas</option>

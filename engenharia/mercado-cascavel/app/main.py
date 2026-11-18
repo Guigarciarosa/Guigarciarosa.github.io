@@ -5,6 +5,7 @@ import asyncio
 import hashlib
 import hmac
 import json
+from urllib.parse import urlencode
 import logging
 import time
 from contextlib import asynccontextmanager
@@ -47,6 +48,10 @@ async def ciclo(app: FastAPI):
     con = inicializar(conectar())
     app.state.con = con
     barramento.ligar(con, asyncio.get_running_loop())
+    from .categorias import reclassificar
+    n = reclassificar(con)
+    if n:
+        barramento.log("INFO", "categorias", f"{n} produtos (re)classificados na árvore de categorias")
     if not cfg.painel_senha:
         barramento.log("WARNING", "painel", "PAINEL_SENHA vazia: painel sem login (só use na LAN)")
     if not cfg.fernet_key:
@@ -162,11 +167,20 @@ async def saude(request: Request):
 
 # ----------------------------------------------------------------- catálogo
 @app.get("/", response_class=HTMLResponse)
-async def inicio(request: Request, q: str = "", categoria: str = "", so_promo: bool = False, loja: str = "",
-                 ordem: str = "relevancia", pagina: int = 1):
+async def inicio(request: Request, q: str = "", categoria: str = "", so_promo: str = "", loja: str = "",
+                 ordem: str = "relevancia", pagina: str = "1"):
+    # so_promo/pagina como texto: "so_promo=" vazio ou "pagina=" lixo não podem virar 422 (htmx não troca a grade)
+    promo = so_promo.lower() in ("1", "true", "on", "sim")
+    pag = int(pagina) if pagina.isdigit() else 1
     c = con(request)
-    ctx = {"q": q, "categoria": categoria, "so_promo": so_promo, "loja": loja, "ordem": ordem,
-           "cat": consultas.catalogo(c, q, categoria, so_promo, loja, ordem, pagina),
+    cat = consultas.catalogo(c, q, categoria, promo, loja, ordem, pag)
+    filtros = {k: v for k, v in {"q": q, "categoria": categoria, "loja": loja,
+                                 "ordem": "" if ordem == "relevancia" else ordem,
+                                 "so_promo": "true" if promo else ""}.items() if v}
+    link = lambda n: "/?" + urlencode(filtros | {"pagina": n})  # noqa: E731
+    ctx = {"q": q, "categoria": categoria, "so_promo": promo, "loja": loja, "ordem": ordem, "cat": cat,
+           "link_anterior": link(cat["pagina"] - 1) if cat["pagina"] > 1 else None,
+           "link_proxima": link(cat["pagina"] + 1) if cat["pagina"] < cat["paginas"] else None,
            "categorias": consultas.categorias(c), "resumo": consultas.resumo(c),
            "lojas": [dict(r) for r in c.execute("SELECT * FROM lojas WHERE ativo=1 ORDER BY tipo DESC, nome")],
            "pagina_atual": "catalogo"}

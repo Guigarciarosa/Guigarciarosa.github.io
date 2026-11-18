@@ -4,6 +4,7 @@ from __future__ import annotations
 import sqlite3
 from typing import Any
 
+from .categorias import TAXONOMIA
 from .normalizar import sem_acento
 
 POR_PAGINA = 48
@@ -13,11 +14,21 @@ def catalogo(con: sqlite3.Connection, q: str = "", categoria: str = "", so_promo
              loja: str = "", ordem: str = "relevancia", pagina: int = 1) -> dict[str, Any]:
     filtros, args = ["a.disponivel=1"], []
     for termo in sem_acento(q).lower().split():
-        filtros.append("(p.nome_normalizado LIKE ? OR p.ean_gtin = ?)")
-        args += [f"%{termo}%", termo]
+        # a busca também olha as tags da árvore curada: "vinho chileno", "limpeza", "portugues"...
+        filtros.append("(p.nome_normalizado LIKE ? OR p.tags_busca LIKE ? OR p.ean_gtin = ?)")
+        args += [f"%{termo}%", f"%{termo}%", termo]
     if categoria:
-        filtros.append("p.categoria = ?")
-        args.append(categoria)
+        # "Vinho" ou "Vinho|Chileno" (árvore curada); qualquer outro valor = categoria bruta da loja
+        cat, _, sub = categoria.partition("|")
+        if cat in {c.nome for c in TAXONOMIA}:
+            filtros.append("p.categoria_curada = ?")
+            args.append(cat)
+            if sub:
+                filtros.append("p.subcategoria = ?")
+                args.append(sub)
+        else:
+            filtros.append("p.categoria = ?")
+            args.append(categoria)
     if so_promo:
         filtros.append("EXISTS (SELECT 1 FROM precos_atuais x WHERE x.id_produto=p.id_produto "
                        "AND x.preco_promocional IS NOT NULL AND x.disponivel=1)")
@@ -89,10 +100,18 @@ def produto(con: sqlite3.Connection, id_produto: int) -> dict | None:
             "historico": [dict(h) for h in hist], "vinculos": [dict(v) for v in vinculos]}
 
 
-def categorias(con: sqlite3.Connection) -> list[str]:
-    return [r[0] for r in con.execute(
-        "SELECT categoria FROM produtos_mestres WHERE categoria IS NOT NULL GROUP BY categoria "
-        "ORDER BY COUNT(*) DESC LIMIT 80")]
+def categorias(con: sqlite3.Connection) -> list[dict]:
+    """Árvore curada com contagem de produtos: [{nome, total, subs: [{nome, total}]}]."""
+    cont: dict[tuple, int] = {}
+    for r in con.execute("SELECT categoria_curada, subcategoria, COUNT(*) FROM produtos_mestres "
+                         "WHERE categoria_curada IS NOT NULL GROUP BY 1, 2"):
+        cont[(r[0], r[1])] = r[2]
+    out = []
+    for c in TAXONOMIA:
+        subs = [{"nome": s.nome, "total": cont.get((c.nome, s.nome), 0)} for s in c.subcategorias]
+        total = sum(v for (cn, _), v in cont.items() if cn == c.nome)
+        out.append({"nome": c.nome, "total": total, "subs": subs})
+    return out
 
 
 def resumo(con: sqlite3.Connection) -> dict:

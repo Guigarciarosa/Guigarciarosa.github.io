@@ -36,8 +36,8 @@
 </div>
 {% if cat.paginas > 1 %}
 <nav class="mt-6 flex items-center justify-center gap-2 text-sm">
-  {% if cat.pagina > 1 %}<a class="botao-sec" hx-get="/?q={{ q|urlencode }}&categoria={{ categoria|urlencode }}&loja={{ loja }}&ordem={{ ordem }}&so_promo={{ 'true' if so_promo else '' }}&pagina={{ cat.pagina - 1 }}" hx-target="#grade" hx-push-url="true">← anterior</a>{% endif %}
+  {% if link_anterior %}<a class="botao-sec" href="{{ link_anterior }}" hx-get="{{ link_anterior }}" hx-target="#grade" hx-push-url="true" hx-on::after-request="document.getElementById('grade').scrollIntoView({behavior: 'smooth'})">← anterior</a>{% endif %}
   <span class="text-zinc-500">página {{ cat.pagina }} de {{ cat.paginas }}</span>
-  {% if cat.pagina < cat.paginas %}<a class="botao-sec" hx-get="/?q={{ q|urlencode }}&categoria={{ categoria|urlencode }}&loja={{ loja }}&ordem={{ ordem }}&so_promo={{ 'true' if so_promo else '' }}&pagina={{ cat.pagina + 1 }}" hx-target="#grade" hx-push-url="true">próxima →</a>{% endif %}
+  {% if link_proxima %}<a class="botao-sec" href="{{ link_proxima }}" hx-get="{{ link_proxima }}" hx-target="#grade" hx-push-url="true" hx-on::after-request="document.getElementById('grade').scrollIntoView({behavior: 'smooth'})">próxima →</a>{% endif %}
 </nav>
 {% endif %}

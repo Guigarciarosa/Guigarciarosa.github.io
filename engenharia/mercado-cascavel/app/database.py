@@ -37,7 +37,10 @@ CREATE TABLE IF NOT EXISTS produtos_mestres (
     marca             TEXT,
     quantidade        REAL,        -- valor na unidade-base (g, ml, un)
     unidade           TEXT,        -- g | ml | un | m
-    categoria         TEXT,
+    categoria         TEXT,        -- como a loja chamou (bruto)
+    categoria_curada  TEXT,        -- árvore própria (app/categorias.py)
+    subcategoria      TEXT,
+    tags_busca        TEXT,        -- categoria + sinônimos, entra na busca de texto
     imagem_local_path TEXT,
     criado_em         TEXT NOT NULL
 );
@@ -210,9 +213,21 @@ def transacao(con: sqlite3.Connection) -> Iterator[sqlite3.Connection]:
             raise
 
 
+MIGRACOES = {  # coluna nova -> tabela (bancos criados antes dela)
+    ("produtos_mestres", "categoria_curada"): "TEXT",
+    ("produtos_mestres", "subcategoria"): "TEXT",
+    ("produtos_mestres", "tags_busca"): "TEXT",
+}
+
+
 def inicializar(con: sqlite3.Connection | None = None) -> sqlite3.Connection:
     con = con or conectar()
     con.executescript(ESQUEMA)
+    for (tabela, coluna), tipo in MIGRACOES.items():
+        cols = {r["name"] for r in con.execute(f"PRAGMA table_info({tabela})")}
+        if coluna not in cols:
+            con.execute(f"ALTER TABLE {tabela} ADD COLUMN {coluna} {tipo}")
+    con.execute("CREATE INDEX IF NOT EXISTS ix_prod_curada ON produtos_mestres(categoria_curada, subcategoria)")
     with transacao(con):
         for l in LOJAS_SEMENTE:
             con.execute(

@@ -159,12 +159,15 @@ class Matcher:
 
     # ------------------------------------------------------------ internos
     def _criar(self, item: ItemColetado, ean: str | None) -> int:
+        from .categorias import classificar, tags_busca
         med = nz.extrair_medida(item.nome)
+        cat, sub = classificar(item.nome, item.categoria, item.marca)
         cur = self.con.execute(
             """INSERT INTO produtos_mestres (ean_gtin, nome_normalizado, nome_exibicao, marca, quantidade,
-                   unidade, categoria, criado_em) VALUES (?,?,?,?,?,?,?,?)""",
+                   unidade, categoria, categoria_curada, subcategoria, tags_busca, criado_em)
+               VALUES (?,?,?,?,?,?,?,?,?,?,?)""",
             (ean, nz.nome_normalizado(item.nome, item.marca), item.nome.strip(), item.marca,
-             med.total, med.unidade, item.categoria, agora()),
+             med.total, med.unidade, item.categoria, cat, sub, tags_busca(cat, sub), agora()),
         )
         idp = int(cur.lastrowid)
         self._indexar(idp, item.nome, item.marca, ean)
